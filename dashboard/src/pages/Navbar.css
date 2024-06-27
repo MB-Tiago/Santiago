@@ -1,0 +1,47 @@
+.navbar {
+    background-color: white;
+    overflow: hidden;
+    position: sticky;
+    height: 70px;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 50px;
+  }
+  
+  .Homebar, .SocmedBar, .AboutBar, .Locbar, .Menubar, .LoginBar {
+    color: black;
+  }
+  
+  .navbar-btn a {
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .navbar-btn {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .navbar-btn a:hover {
+    background-color: rgb(158, 158, 158);
+    color: #323031;
+  }
+
+  .logo-img { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 13px  ;
+  }
+  
+  .logo-img img {
+    width: 60px;
+    height: auto;
+  }
+  
