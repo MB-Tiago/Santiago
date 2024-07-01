@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Menu.css'
 import axios from 'axios'
+import Navbar from './Navbar'
 
 function Menu() {
     const [values, setValues] = useState([])
@@ -14,8 +15,10 @@ function Menu() {
         setValues(menu?.data?.data)
     }
     return (
+        
         <div className="menu">
-            <h1>Our Menu</h1>
+            <Navbar/>
+            <h1>TiagoShop</h1>
             <div className="menu-container">
                 {
                     values?.map((pro) => (

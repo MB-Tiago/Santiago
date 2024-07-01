@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal'; // Ensure Modal is imported
+import Modal from '@mui/material/Modal';
 import './Login.css';
 import axios from 'axios';
+import Register from './Register';
 
 function Login() {
-  const [ModalStudOpen, setModalStudOpen] = useState(true); // Modal starts open
+  const [ModalStudOpen, setModalStudOpen] = useState(true);
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [loginID, setLoginID] = useState('');
   const [password, setPassword] = useState('');
   const [loginIDErr, setLoginIDError] = useState('');
@@ -18,54 +20,41 @@ function Login() {
     setModalStudOpen(true);
   }, []);
 
-  useEffect(() => {
-    navLogin();
-  }, []);
+  const handleCloseStudModal = () => {
+    setModalStudOpen(false);
+    window.location.href = '/';
+  };
 
-  const navLogin = () => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    if (token) {
-      navigate('/AdminDashboard');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://192.168.10.13:3004/login', { loginID, password });
+      const { token, role, redirectUrl } = response.data;
 
-    }
-  }
-    const handleCloseStudModal = () => {
-      setModalStudOpen(false);
-      window.location.href = '/'; 
-    };
+      localStorage.setItem('token', token);
+      localStorage.setItem('role', role);
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        console.log('Sending loginID:', loginID);
-        console.log('Sending password:', password);
-
-        const response = await axios.post('http://192.168.10.13:3004/login', { loginID, password });
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-        navigate('/AdminDashboard');
-        window.location.reload();
-      } catch (err) {
-        console.error(err);
-        if (err.response) {
-          console.error(err.response.data);
-          if (err.response.status === 400) {
-            setLoginIDError('Invalid login ID');
-            setPasswordError('Invalid password');
-          } else {
-            setLoginIDError('An error occurred');
-            setPasswordError('An error occurred');
-          }
+      // Navigate based on the role and redirectUrl received from the backend
+      navigate(redirectUrl);
+      window.location.reload(); // You may remove this line if not needed
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 400) {
+          setLoginIDError('Invalid login ID');
+          setPasswordError('Invalid password');
         } else {
           setLoginIDError('An error occurred');
           setPasswordError('An error occurred');
         }
+      } else {
+        setLoginIDError('An error occurred');
+        setPasswordError('An error occurred');
       }
-    };
+    }
+  };
 
-
-    return (
+  return (
+    <>
       <Modal open={ModalStudOpen} onClose={handleCloseStudModal}>
         <div className="login-modal">
           <div className="main-login-form">
@@ -76,10 +65,10 @@ function Login() {
                   value={loginID}
                   onChange={(e) => {
                     setLoginID(e.target.value);
-                    setLoginIDError(''); 
+                    setLoginIDError('');
                   }}
                   id="outlined-basic-1"
-                  label="LoginID"
+                  label="Username"
                   variant="outlined"
                   required
                   error={!!loginIDErr}
@@ -89,7 +78,7 @@ function Login() {
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    setPasswordError(''); 
+                    setPasswordError('');
                   }}
                   id="outlined-basic-2"
                   label="Password"
@@ -99,15 +88,25 @@ function Login() {
                   error={!!passwordError}
                   helperText={passwordError ? passwordError : ""}
                 />
-
                 <Button variant="contained" onClick={handleSubmit}>Login</Button>
                 <Button variant="contained" onClick={handleCloseStudModal}>Cancel</Button>
+                <Button variant="contained" onClick={() => setRegisterModalOpen(true)}>Register</Button>
               </div>
+              <h3>debug</h3>
+              <h4>username:admin, password:admin</h4>
+              <h4>username:cashier, password:cashier</h4>
+              <h4>username:user, password:user</h4>
+             
             </div>
           </div>
         </div>
-      </Modal>
-    );
-  }
 
-  export default Login;
+      </Modal>
+      <Register open={registerModalOpen} onClose={() => setRegisterModalOpen(false)} />
+
+
+    </>
+  );
+}
+
+export default Login;

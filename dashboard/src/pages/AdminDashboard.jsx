@@ -178,9 +178,8 @@ const AdminDashboard = () => {
         
         <div className="admin-dashboard-container">
             <Navbar/>
-            <div className="header">
-                <h2>Admin Dashboard</h2>
-                <Button variant="contained" onClick={handleOpenAddModal}>Add</Button>
+            <div className="header">    
+                <Button variant="contained" onClick={handleOpenAddModal}>Add Item</Button>
             </div>
 
             <Modal open={modalAddOpen} onClose={handleCloseAddModal}>

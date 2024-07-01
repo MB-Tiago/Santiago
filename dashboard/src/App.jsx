@@ -5,7 +5,9 @@ import Menu from './pages/Menu';
 
 import './App.css';
 import Login from './pages/Login';
-import AdminDashboard from './pages/AdminDashboard';  
+import AdminDashboard from './pages/AdminDashboard';
+import TiagoShop from './pages/TiagoShop';
+import Billing from './pages/Billing';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
         <Route path="/TiagoShop" element={<TiagoShop />} />
+        <Route path="/Billing" element={<Billing />} />
+       
       
       </Routes>
     </BrowserRouter>

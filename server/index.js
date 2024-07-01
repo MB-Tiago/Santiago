@@ -10,9 +10,10 @@ const app = express();
 const PORT = process.envPORT || 3004;
 const HOST = '192.168.10.13'
 
+const User = require('./models/userData');
 const adminModel = require('./models/adminData.js');
 const Products = require('./models/productModel.js');
-
+const router = express.Router();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'uploads');
@@ -48,29 +49,66 @@ app.listen(3004, '192.168.10.13', () => {
 
 ConnectToDatabase()
 
-app.post('/login', async (req, res) => {
+
+app.post('/register', async (req, res) => {
+    const { registerID, registerPassword, bankAccount, userAgreement } = req.body;
+  
+    if (!userAgreement) {
+      return res.status(400).send({ message: 'You must agree to the user agreement' });
+    }
+  
     try {
-        const { loginID, password } = req.body;
-
-        console.log('Received loginID:', loginID);
-        console.log('Received password:', password);
-
-        if (!loginID || !password) {
-            return res.status(400).json({ message: "Login ID and password are required" });
-        }
-
-        const user = await adminModel.findOne({ adminID: loginID, password });
-        if (!user) {
-            return res.status(400).json({ message: "Invalid login ID or password" });
-        }
-
-        const token = jwt.sign({ Adm: user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
-        res.json({ token, userId: user._id });
+      const newUser = new User({
+        userID: registerID,
+        password: registerPassword, // Directly using the password
+        bankAccount: bankAccount,
+        agreedToUserAgreement: userAgreement
+      });
+  
+      await newUser.save();
+      res.status(201).send({ message: 'User registered successfully' });
     } catch (err) {
-        console.error("Error during login:", err);
-        res.status(500).json({ message: "Internal server error" });
+      console.error(err);
+      res.status(500).send({ message: 'An error occurred during registration' });
+    }
+  });
+
+  app.post('/login', async (req, res) => {
+    const { loginID, password } = req.body;
+
+    try {
+        let user = await User.findOne({ userID: loginID });
+        let role = 'user';
+        let redirectUrl = '/TiagoShop'; 
+
+        if (user.userRole == 'admin') {
+            user = await User.findOne({ userID: loginID });
+            role = 'admin';
+            redirectUrl = '/AdminDashboard'; 
+        }
+
+        if (user.userRole == 'cashier') {
+            user = await User.findOne({ userID: loginID });
+            role = 'cashier';
+            redirectUrl = '/Billing'; 
+        }
+
+        if (!user || user.password !== password) {
+            return res.status(400).send({ message: 'Invalid login ID or password' });
+        }
+
+       
+        const token = jwt.sign({ id: user._id, role: role }, 'your_secret_key', { expiresIn: '1h' });
+
+       
+        res.status(200).send({ token, role, redirectUrl });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'An error occurred during login' });
     }
 });
+
+
 
 app.post('/adduser', upload.single('image'), async (req, res) => {
     try {

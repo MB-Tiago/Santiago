@@ -21,21 +21,27 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className='logo-img'>
-        <img src="logo.png" alt="logo" />
+        <img src="Order.png" alt="logo" />
       
       </div>
       <div className='navbar-btn'>
-        {isLoggedIn ? (
-          <Link to="/" className='Homebar' onClick={handleLogout}>Logout</Link>
-        ) : (
-          <>
-            <Link to="/AdminDashboard" className='Homebar'>Home</Link>
-            <Link to="/Menu" className='Menubar'>Menu</Link>
-            <Link to="/" className='LoginBar'>Login</Link>
-            <Link to="/TiagoShop" className='Shop'>TiagoShop</Link>
-          </>
-        )}
-      </div>
+  {isLoggedIn ? (
+    <>
+      
+      <Link to="/AdminDashboard" className='Homebar'>Home</Link>
+      <Link to="/TiagoShop" className='Shop'>TiagoShop</Link>
+      <Link to="/Billing" className='Shop'>Billing</Link>
+      <Link to="/" className='Homebar' onClick={handleLogout}>Logout</Link>
+    </>
+  ) : (
+    <>
+      <Link to="/" className='LoginBar'>Login</Link>
+      <Link to="/TiagoShop" className='Shop'>TiagoShop</Link>
+      <Link to="/Billing" className='Shop'>Billing</Link>
+    </>
+  )}
+</div>
+
     </nav>
   );
 }
