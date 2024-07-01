@@ -16,6 +16,7 @@ function App() {
         <Route path="/Menu" element={<Menu />} />
         <Route path="/" element={<Login />} />
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/TiagoShop" element={<TiagoShop />} />
       
       </Routes>
     </BrowserRouter>

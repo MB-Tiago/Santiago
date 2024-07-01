@@ -29,9 +29,10 @@ function Navbar() {
           <Link to="/" className='Homebar' onClick={handleLogout}>Logout</Link>
         ) : (
           <>
-            <Link to="/" className='Homebar'>Home</Link>
+            <Link to="/AdminDashboard" className='Homebar'>Home</Link>
             <Link to="/Menu" className='Menubar'>Menu</Link>
-            <Link to="/Login" className='LoginBar'>Login</Link>
+            <Link to="/" className='LoginBar'>Login</Link>
+            <Link to="/TiagoShop" className='Shop'>TiagoShop</Link>
           </>
         )}
       </div>
