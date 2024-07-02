@@ -12,7 +12,7 @@ function Dashboard() {
       </div>
       <h1>Title</h1>
       <div className='main-section'>
-        <h2>
+        <h2> 
           Header
         </h2>
 

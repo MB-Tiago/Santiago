@@ -184,7 +184,7 @@ const AdminDashboard = () => {
 
             <Modal open={modalAddOpen} onClose={handleCloseAddModal}>
                 <div className="view-modal">
-                    <h1>Add</h1>
+                    <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (

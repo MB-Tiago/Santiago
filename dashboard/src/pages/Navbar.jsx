@@ -35,9 +35,7 @@ function Navbar() {
     </>
   ) : (
     <>
-      <Link to="/" className='LoginBar'>Login</Link>
-      <Link to="/TiagoShop" className='Shop'>TiagoShop</Link>
-      <Link to="/Billing" className='Shop'>Billing</Link>
+      
     </>
   )}
 </div>

@@ -1,5 +1,8 @@
 /* Navbar.css */
 .navbar {
+  width: 100%;
+  padding: 10px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,20 +31,4 @@
 
 .navbar-btn a:hover {
   background-color: #555;
-}
-
-.Homebar {
-  /* Add specific styles for Homebar if needed */
-}
-
-.Menubar {
-  /* Add specific styles for Menubar if needed */
-}
-
-.LoginBar {
-  /* Add specific styles for LoginBar if needed */
-}
-
-.Shop {
-  /* Add specific styles for Shop if needed */
 }
