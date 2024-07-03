@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Button, TextField, Modal } from '@mui/material';
+import { Button, TextField, Modal, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import './AdminDashboard.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
@@ -24,6 +24,7 @@ const AdminDashboard = () => {
     const [modalEditOpen, setModalEditOpen] = useState(false);
     const [values, setValues] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchBy, setSearchBy] = useState('name'); // Default search by name
 
     useEffect(() => {
         fetchMenu();
@@ -177,7 +178,7 @@ const AdminDashboard = () => {
     };
 
     const filteredProducts = values.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product[searchBy].toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -191,6 +192,20 @@ const AdminDashboard = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <FormControl variant="outlined">
+                    <InputLabel id="search-by-label">Search By</InputLabel>
+                    <Select
+                        labelId="search-by-label"
+                        id="search-by"
+                        value={searchBy}
+                        onChange={(e) => setSearchBy(e.target.value)}
+                        label="Search By"
+                    >
+                        <MenuItem value="name">Name</MenuItem>
+                        <MenuItem value="price">Price</MenuItem>
+                        <MenuItem value="description">Description</MenuItem>
+                    </Select>
+                </FormControl>
                 <Button variant="contained" onClick={handleOpenAddModal}>
                     Add Item
                 </Button>
@@ -314,15 +329,13 @@ const AdminDashboard = () => {
                         <div className="image-container">
                             <img
                                 src={`http://192.168.10.13:3004/uploads/${pro.image}`}
-                                alt=""
+                                alt="Product"
                             />
                         </div>
-                        <div className="label">
-                            <h3>{pro.name}</h3>
-                            <h3>₱ {pro.price}</h3>
-                        </div>
-                        <div className="description">
+                        <div className="product-info">
+                            <h2>{pro.name}</h2>
                             <p>{pro.description}</p>
+                            <h3>${pro.price}</h3>
                         </div>
                     </div>
                 ))}
