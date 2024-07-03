@@ -1,8 +1,9 @@
 .admin-dashboard-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; /* Align items to the left initially */
     padding: 30px;
+    margin-left: 250px; /* Adjust for the width of your sidebar */
 }
 
 .header {
@@ -43,13 +44,6 @@
 
 }
 
-/* .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    border: blue 1px solid;
-
-} */
 
 .product-card {
     width: 300px;
@@ -84,13 +78,15 @@
     font-size: 1rem;
 }
 
-.btn-add{
+.btn-add {
     display: flex;
-    flex-direction: column;
-
+    flex-direction: row; /* Ensure the direction is row */
+    justify-content: flex-end; /* Align items to the right */
     width: 100%;
     gap: 15px;
-}
+  }
+  
+  
 
 .edit-menu-container {
     width: 100%;

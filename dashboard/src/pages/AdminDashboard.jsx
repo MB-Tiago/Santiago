@@ -3,7 +3,7 @@ import { Card, CardContent, Button, TextField, Modal } from '@mui/material';
 import './AdminDashboard.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
-import Navbar from './Navbar';
+import SidebarAdmin from './SidebarAdmin';
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState({
@@ -23,6 +23,7 @@ const AdminDashboard = () => {
     const [modalAddOpen, setModalAddOpen] = useState(false);
     const [modalEditOpen, setModalEditOpen] = useState(false);
     const [values, setValues] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         fetchMenu();
@@ -31,6 +32,7 @@ const AdminDashboard = () => {
     const handleOpenAddModal = () => {
         setModalAddOpen(true);
     };
+
     const handleCloseAddModal = () => {
         setModalAddOpen(false);
     };
@@ -174,12 +176,24 @@ const AdminDashboard = () => {
         setValues(menu?.data?.data);
     };
 
+    const filteredProducts = values.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
-        
         <div className="admin-dashboard-container">
-            <Navbar/>
-            <div className="header">    
-                <Button variant="contained" onClick={handleOpenAddModal}>Add Item</Button>
+            <SidebarAdmin />
+            <div className="header">
+                <TextField
+                    id="search"
+                    label="Search"
+                    variant="outlined"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Button variant="contained" onClick={handleOpenAddModal}>
+                    Add Item
+                </Button>
             </div>
 
             <Modal open={modalAddOpen} onClose={handleCloseAddModal}>
@@ -208,7 +222,7 @@ const AdminDashboard = () => {
                         <TextField
                             name="productPrice"
                             label="Price"
-                            type='number'
+                            type="number"
                             value={products.productPrice}
                             onChange={handleOnChange}
                         />
@@ -218,9 +232,13 @@ const AdminDashboard = () => {
                             accept="image/*"
                             onChange={handleOnChange}
                         />
-                        <div className='btn-add'>
-                            <Button variant="contained" onClick={handleAddProduct}>Add</Button>
-                            <Button variant="contained" onClick={handleCancel}>Cancel</Button>
+                        <div className="btn-add">
+                            <Button variant="contained" onClick={handleAddProduct}>
+                                Add
+                            </Button>
+                            <Button variant="contained" onClick={handleCancel}>
+                                Cancel
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -233,7 +251,10 @@ const AdminDashboard = () => {
                         <div className="modal-forms">
                             <div className="image-container">
                                 {selectedProduct.image ? (
-                                    <img src={`http://192.168.10.13:3004/uploads/${selectedProduct.image}`} alt="Product" />
+                                    <img
+                                        src={`http://192.168.10.13:3004/uploads/${selectedProduct.image}`}
+                                        alt="Product"
+                                    />
                                 ) : (
                                     <h1>No image</h1>
                                 )}
@@ -252,15 +273,31 @@ const AdminDashboard = () => {
                             />
                             <TextField
                                 name="productPrice"
-                                type='number'
+                                type="number"
                                 label="Product Price"
                                 value={selectedProduct.productPrice}
                                 onChange={handleEditChange}
                             />
-                            <div className='btn-add'>
-                                <Button variant="contained" onClick={handleUpdateProduct}>Save Changes</Button>
-                                <Button variant="contained" onClick={handleDeleteProduct} startIcon={<DeleteIcon />}>Delete</Button>
-                                <Button variant="contained" onClick={handleCloseEditModal}>Cancel</Button>
+                            <div className="btn-add">
+                                <Button
+                                    variant="contained"
+                                    onClick={handleUpdateProduct}
+                                >
+                                    Save Changes
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleDeleteProduct}
+                                    startIcon={<DeleteIcon />}
+                                >
+                                    Delete
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleCloseEditModal}
+                                >
+                                    Cancel
+                                </Button>
                             </div>
                         </div>
                     )}
@@ -268,17 +305,24 @@ const AdminDashboard = () => {
             </Modal>
 
             <div className="edit-menu-container">
-                {values?.map((pro) => (
-                    <div key={pro?._id} className="card-edit" onClick={() => handleOpenEditModal(pro)}>
+                {filteredProducts.map((pro) => (
+                    <div
+                        key={pro._id}
+                        className="card-edit"
+                        onClick={() => handleOpenEditModal(pro)}
+                    >
                         <div className="image-container">
-                            <img src={`http://192.168.10.13:3004/uploads/${pro?.image}`} alt='' />
+                            <img
+                                src={`http://192.168.10.13:3004/uploads/${pro.image}`}
+                                alt=""
+                            />
                         </div>
-                        <div className='label'>
-                            <h3>{pro?.name}</h3>
-                            <h3>₱ {pro?.price}</h3>
+                        <div className="label">
+                            <h3>{pro.name}</h3>
+                            <h3>₱ {pro.price}</h3>
                         </div>
-                        <div className='description'>
-                            <p>{pro?.description}</p>
+                        <div className="description">
+                            <p>{pro.description}</p>
                         </div>
                     </div>
                 ))}
