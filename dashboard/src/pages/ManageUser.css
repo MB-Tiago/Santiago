@@ -1,0 +1,36 @@
+.manage-user-page {
+    padding: 20px;
+    margin-left: 250px; /* Adjust for the width of your sidebar */
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  button {
+    margin: 10px 0;
+    padding: 10px;
+    display: block;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th,
+  table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+  }
+  
+  button {
+    margin: 5px;
+  }
+  

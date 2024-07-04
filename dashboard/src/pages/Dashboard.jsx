@@ -1,11 +1,11 @@
 import React from 'react';
 import './Dashboard.css';
-import Navbar from './Navbar';
+import SidebarAdmin from './SidebarAdmin';
 
 function Dashboard() {
   return (
     <div className="dashboard">
-      <Navbar/>
+      <SidebarAdmin/>
       <div className='image-section'>
         {/* <img src="bg.jpg" alt="Description of image" /> */}
         <h1>Image</h1>

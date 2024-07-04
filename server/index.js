@@ -13,7 +13,6 @@ const HOST = '192.168.10.13'
 const User = require('./models/userData');
 const adminModel = require('./models/adminData.js');
 const Products = require('./models/productModel.js');
-const router = express.Router();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'uploads');
@@ -107,6 +106,77 @@ app.post('/register', async (req, res) => {
         res.status(500).send({ message: 'An error occurred during login' });
     }
 });
+
+// // Route to fetch users
+// app.get('/api/users', async (req, res) => {
+//     try {
+//       const users = await User.find();
+//       res.json(users);
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+//   });
+
+
+// Create user
+app.post('/api/users', async (req, res) => {
+    try {
+      const user = new User(req.body);
+      await user.save();
+      res.status(201).send(user);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  });
+  
+  // Read users
+  app.get('/api/users', async (req, res) => {
+    try {
+      const users = await User.find({});
+      res.send(users);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+  
+  // Read user by ID
+  app.get('/api/users/:id', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+  
+  // Update user
+  app.patch('/api/users/:id', async (req, res) => {
+    try {
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  });
+  
+  // Delete user
+  app.delete('/api/users/:id', async (req, res) => {
+    try {
+      const user = await User.findByIdAndDelete(req.params.id);
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
 
 
 
