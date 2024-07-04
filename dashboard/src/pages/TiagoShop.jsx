@@ -3,6 +3,7 @@ import { Button, TextField, RadioGroup, FormControlLabel, Radio } from '@mui/mat
 import axios from 'axios';
 import './TiagoShop.css';
 import Navbar from './Navbar';
+import Billing from './Billing'; // Import the Billing component
 
 const TiagoShop = () => {
     const [view, setView] = useState('shop');
@@ -41,7 +42,6 @@ const TiagoShop = () => {
     const getTotalPrice = () => {
         return cart.reduce((total, product) => total + parseInt(product.price), 0);
     };
-     
 
     const handleCheckout = () => {
         setView('billing');
@@ -59,14 +59,38 @@ const TiagoShop = () => {
         }));
     };
 
-    const handleBillingSubmit = () => {
-        // Submit billing details and process the payment
-        alert('Billing details submitted');
+    const handleBillingSubmit = async () => {
+        const token = "$2b$10$kMkqZsz2PxtZG8FMInyHIuVpaZsc9pnbyucmPbSpG77udztV9kZey"; // Replace with your token
+        const accountNumber = billingDetails.bankAccountNumber; // Assuming bankAccountNumber is used
+
+        try {
+            const response = await axios.post(
+                'http://192.168.10.14:3001/api/unionbank/transfertransaction',
+                {
+                    accountNumber,
+                    amount: getTotalPrice(),
+                    details: billingDetails
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (response.data.success) {
+                alert('Payment successful');
+            } else {
+                alert('Payment failed');
+            }
+        } catch (error) {
+            console.error('Error submitting payment:', error);
+            alert('Payment failed');
+        }
     };
 
     return (
         <div className="app-container">
-            {/* <Navbar/> */}
             <nav className="navbar">
                 <Button onClick={() => setView('shop')}>Shop</Button>
                 <Button onClick={() => setView('cart')}>Cart ({cart.length})</Button>
@@ -105,55 +129,14 @@ const TiagoShop = () => {
             )}
 
             {view === 'billing' && (
-                <div className="billing-container">
-                    <h2>Billing</h2>
-                    <RadioGroup
-                        value={transactionMode}
-                        onChange={handleTransactionModeChange}
-                    >
-                        <FormControlLabel value="creditCard" control={<Radio />} label="Credit Card" />
-                        <FormControlLabel value="bankAccount" control={<Radio />} label="Bank Account" />
-                    </RadioGroup>
-                    {transactionMode === 'creditCard' && (
-                        <div className="credit-card-form">
-                            <TextField
-                                name="cardNumber"
-                                label="Card Number"
-                                value={billingDetails.cardNumber}
-                                onChange={handleBillingChange}
-                            />
-                            <TextField
-                                name="cardExpiry"
-                                label="Card Expiry"
-                                value={billingDetails.cardExpiry}
-                                onChange={handleBillingChange}
-                            />
-                            <TextField
-                                name="cardCVC"
-                                label="Card CVC"
-                                value={billingDetails.cardCVC}
-                                onChange={handleBillingChange}
-                            />
-                        </div>
-                    )}
-                    {transactionMode === 'bankAccount' && (
-                        <div className="bank-account-form">
-                            <TextField
-                                name="bankAccountNumber"
-                                label="Bank Account Number"
-                                value={billingDetails.bankAccountNumber}
-                                onChange={handleBillingChange}
-                            />
-                            <TextField
-                                name="bankRoutingNumber"
-                                label="Bank Routing Number"
-                                value={billingDetails.bankRoutingNumber}
-                                onChange={handleBillingChange}
-                            />
-                        </div>
-                    )}
-                    <Button variant="contained" onClick={handleBillingSubmit}>Submit Payment</Button>
-                </div>
+                <Billing 
+                    cart={cart} 
+                    transactionMode={transactionMode}
+                    billingDetails={billingDetails}
+                    handleTransactionModeChange={handleTransactionModeChange}
+                    handleBillingChange={handleBillingChange}
+                    handleBillingSubmit={handleBillingSubmit}
+                />
             )}
         </div>
     );
