@@ -10,12 +10,10 @@ const TiagoShop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [transactionMode, setTransactionMode] = useState('creditCard');
-    const [billingDetails, setBillingDetails] = useState({
-        cardNumber: '',
-        cardExpiry: '',
-        cardCVC: '',
-        bankAccountNumber: '',
-        bankRoutingNumber: ''
+    const [values, setValues] = useState({
+        debitAccount: '',
+        creditAccount: '',
+        amount: ''
     });
 
     useEffect(() => {
@@ -24,8 +22,14 @@ const TiagoShop = () => {
 
     const fetchProducts = async () => {
         try {
+            const routingNumber = "000000005";
+
             const response = await axios.get('http://192.168.10.13:3004/getallproducts');
             setProducts(response.data.data);
+            setValues((prev) => ({
+                ...prev,
+                creditAccount: routingNumber
+            }))
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -51,41 +55,39 @@ const TiagoShop = () => {
         setTransactionMode(event.target.value);
     };
 
-    const handleBillingChange = (event) => {
-        const { name, value } = event.target;
-        setBillingDetails((prevDetails) => ({
-            ...prevDetails,
+    const handleBillingChange = (e) => {
+        const { name, value } = e.target;
+        setValues((prev) => ({
+            ...prev,
             [name]: value
+        }));
+        setValues((prev) => ({
+            ...prev,
+            amount: getTotalPrice()
         }));
     };
 
     const handleBillingSubmit = async () => {
-        const token = "$2b$10$kMkqZsz2PxtZG8FMInyHIuVpaZsc9pnbyucmPbSpG77udztV9kZey"; // Replace with your token
-        const accountNumber = billingDetails.bankAccountNumber; // Assuming bankAccountNumber is used
-
         try {
-            const response = await axios.post(
-                'http://192.168.10.14:3001/api/unionbank/transfertransaction',
-                {
-                    accountNumber,
-                    amount: getTotalPrice(),
-                    details: billingDetails
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const token = "$2b$10$amvwS7BRJVXXA8Gmkw0cu.5shavuIjQB2HqIJj7CSrF5JMBsUNON6";
+            const debit = values.debitAccount;
+            const credit = values.creditAccount; 
+            const amount = getTotalPrice();
+            
 
-            if (response.data.success) {
-                alert('Payment successful');
-            } else {
-                alert('Payment failed');
-            }
+            const response = await axios.post('http://192.168.10.14:3001/api/unionbank/transfertransaction', { 
+                debitAccount: debit, 
+                creditAccount: credit, 
+                amount: amount
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+           console.log(response?.data);
         } catch (error) {
             console.error('Error submitting payment:', error);
-            alert('Payment failed');
         }
     };
 
@@ -129,10 +131,10 @@ const TiagoShop = () => {
             )}
 
             {view === 'billing' && (
-                <Billing 
-                    cart={cart} 
+                <Billing
+                    cart={cart}
                     transactionMode={transactionMode}
-                    billingDetails={billingDetails}
+                    billingDetails={values}
                     handleTransactionModeChange={handleTransactionModeChange}
                     handleBillingChange={handleBillingChange}
                     handleBillingSubmit={handleBillingSubmit}

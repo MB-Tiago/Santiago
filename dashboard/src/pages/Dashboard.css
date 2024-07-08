@@ -11,21 +11,39 @@ html {
   color: black;
   text-align: center;
   display: flex;
-  flex-direction: column;
+  width: 100%;
+}
 
+.wrapper {
+  width: 100%;
+  height: 200vh;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.wrapper .image-section {
+  height: 100%;
+  display: flex;
+  justify-items: center;
   align-items: center;
 }
 
-.image-section {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.wrapper .image-section .box {
+  background: #000;
+  width: 20rem;
+  height: 20rem;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
-.image-section img {
+.wrapper .image-section .box img {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  object-fit: cover;
+
 
 }
 

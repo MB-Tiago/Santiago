@@ -2,14 +2,7 @@ import React from 'react';
 import { Button, TextField, RadioGroup, FormControlLabel, Radio, Modal, Backdrop, Fade, Paper, Typography } from '@mui/material';
 import './Billing.css';
 
-const Billing = ({
-    cart,
-    transactionMode,
-    billingDetails,
-    handleTransactionModeChange,
-    handleBillingChange,
-    handleBillingSubmit
-}) => {
+const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeChange, handleBillingChange, handleBillingSubmit }) => {
     const getTotalPrice = () => {
         return cart.reduce((total, product) => total + parseInt(product.price), 0);
     };
@@ -24,35 +17,39 @@ const Billing = ({
                 <FormControlLabel value="Union Bank" control={<Radio />} label="Union Bank" />
                 <FormControlLabel value="Metro Bank" control={<Radio />} label="Metro Bank" />
             </RadioGroup>
-        
+
             {transactionMode === 'Union Bank' && (
                 <div className="bank-account-form">
                     <TextField
-                        name="bankAccountNumber"
+                        name="debitAccount"
                         label="Bank Account Number"
-                        value={billingDetails.bankAccountNumber}
+                        value={billingDetails?.debitAccount}
                         onChange={handleBillingChange}
                     />
                     <TextField
-                        name="bankRoutingNumber"
+                        name="creditAccount"
                         label="Bank Routing Number"
-                        value={billingDetails.bankRoutingNumber}
+                        value={billingDetails?.creditAccount}
                         onChange={handleBillingChange}
+                        InputProps={{
+                            readOnly: true,
+                        }}
                     />
+
                 </div>
             )}
             {transactionMode === 'Metro Bank' && (
                 <div className="bank-account-form">
                     <TextField
-                        name="bankAccountNumber"
+                        name="debitAccount"
                         label="Bank Account Number"
-                        value={billingDetails.bankAccountNumber}
+                        value={billingDetails?.debitAccount}
                         onChange={handleBillingChange}
                     />
                     <TextField
-                        name="bankRoutingNumber"
+                        name="creditAccount"
                         label="Bank Routing Number"
-                        value={billingDetails.bankRoutingNumber}
+                        value="000000005"
                         onChange={handleBillingChange}
                     />
                 </div>
