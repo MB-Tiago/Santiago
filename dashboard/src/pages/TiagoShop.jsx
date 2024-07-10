@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import './TiagoShop.css';
-import Navbar from './Navbar';
-import Billing from './Billing'; // Import the Billing component
+import Billing from './Billing';
+import SalesReport from './SalesReport';
 
 const TiagoShop = () => {
     const [view, setView] = useState('shop');
@@ -29,7 +29,7 @@ const TiagoShop = () => {
             setValues((prev) => ({
                 ...prev,
                 creditAccount: routingNumber
-            }))
+            }));
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -71,13 +71,12 @@ const TiagoShop = () => {
         try {
             const token = "$2b$10$amvwS7BRJVXXA8Gmkw0cu.5shavuIjQB2HqIJj7CSrF5JMBsUNON6";
             const debit = values.debitAccount;
-            const credit = values.creditAccount; 
+            const credit = values.creditAccount;
             const amount = getTotalPrice();
-            
 
-            const response = await axios.post('http://192.168.10.14:3001/api/unionbank/transfertransaction', { 
-                debitAccount: debit, 
-                creditAccount: credit, 
+            const response = await axios.post('http://192.168.10.14:3001/api/unionbank/transfertransaction', {
+                debitAccount: debit,
+                creditAccount: credit,
                 amount: amount
             }, {
                 headers: {
@@ -85,34 +84,107 @@ const TiagoShop = () => {
                 }
             });
 
-           console.log(response?.data);
+            if (response.data.success) {
+                alert('Payment successful!');
+
+                // Iterate over cart items to record sales
+                for (const product of cart) {
+                    const salePayload = {
+                        productName: product.name,
+                        price: product.price
+                    };
+
+                    console.log('Sending sale record:', salePayload);
+
+                    // Send sale record to backend
+                    const saleResponse = await axios.post('http://192.168.10.13:3004/api/recordSale', salePayload);
+
+                    if (!saleResponse.data.success) {
+                        console.error('Failed to record sale:', saleResponse.data.message);
+                        // Handle failure to record sale (e.g., retry logic or error handling)
+                    }
+                }
+
+                // Clear cart and reset view to shop
+                setCart([]);
+                setView('shop');
+            } else {
+                alert('Insufficient balance or account does not exist');
+            }
         } catch (error) {
             console.error('Error submitting payment:', error);
+            alert('Error submitting payment! Please try again.');
         }
+    };
+
+
+    const handleViewChange = (view) => {
+        console.log(`Changing view to: ${view}`);
+        setView(view);
+    };
+
+    const handleLogout = () => {
+        window.location.href = '/';
     };
 
     return (
         <div className="app-container">
             <nav className="navbar">
-                <Button onClick={() => setView('shop')}>Shop</Button>
-                <Button onClick={() => setView('cart')}>Cart ({cart.length})</Button>
+                <Button onClick={() => handleViewChange('shop')}>Shop</Button>
+                <Button onClick={() => handleViewChange('cart')}>Cart ({cart.length})</Button>
+                
+                <Button onClick={handleLogout}>Logout</Button>
             </nav>
 
             {view === 'shop' && (
                 <div className="shop-container">
-                    <h2>Shop</h2>
-                    <div className="products-list">
+                    <div className="logo2">
+
+                        <div className="tiagoshop">
+                            <h2>TiagoShop</h2>
+                        </div>
+                    </div>
+
+                    <div className="edit-menu-container">
                         {products.map((product) => (
-                            <div key={product._id} className="product-card">
-                                <img src={`http://192.168.10.13:3004/uploads/${product.image}`} alt={product.name} />
-                                <h3>{product.name}</h3>
+                            <div key={product._id} className="card-edit">
+                                  <div className="image-container">
+                                  <img src={`http://192.168.10.13:3004/uploads/${product.image}`} alt={product.name} />
+                   
+                                    </div>
+                                    <div className="product-info">
+                                    <h3>{product.name}</h3>
                                 <p>{product.description}</p>
                                 <h4>₱ {product.price}</h4>
                                 <Button variant="contained" onClick={() => addToCart(product)}>Add to Cart</Button>
+                                    </div>
+
                             </div>
                         ))}
                     </div>
                 </div>
+                
+            //     <div className="edit-menu-container">
+            //     {filteredProducts.map((pro) => (
+            //         <div
+            //             key={pro._id}
+            //             className="card-edit"
+            //             onClick={() => handleOpenEditModal(pro)}
+            //         >
+            //             <div className="image-container">
+            //                 <img
+            //                     src={`http://192.168.10.13:3004/uploads/${pro.image}`}
+            //                     alt="Product"
+            //                 />
+            //             </div>
+            //             <div className="product-info">
+            //                 <h2>{pro.name}</h2>
+            //                 <p>{pro.description}</p>
+            //                 <h3>${pro.price}</h3>
+            //             </div>
+            //         </div>
+            //     ))}
+            // </div>
             )}
 
             {view === 'cart' && (
@@ -140,6 +212,7 @@ const TiagoShop = () => {
                     handleBillingSubmit={handleBillingSubmit}
                 />
             )}
+
         </div>
     );
 };

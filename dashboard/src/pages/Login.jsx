@@ -92,10 +92,7 @@ function Login() {
                 <Button variant="contained" onClick={handleCloseStudModal}>Cancel</Button>
                 <Button variant="contained" onClick={() => setRegisterModalOpen(true)}>Register</Button>
               </div>
-              <h3>debug</h3>
-              <h4>username:admin, password:admin</h4>
-              <h4>username:cashier, password:cashier</h4>
-              <h4>username:user, password:user</h4>
+        
              
             </div>
           </div>

@@ -56,6 +56,8 @@ const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeC
             )}
             <h3>Total: ₱ {getTotalPrice()}</h3>
             <Button variant="contained" onClick={handleBillingSubmit}>Submit Payment</Button>
+
+            
         </div>
     );
 };

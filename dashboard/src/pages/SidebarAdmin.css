@@ -13,11 +13,19 @@
     top: 0;
     left: 0; /* Ensure the sidebar is on the left side */
   }
+
+  .logo{
+    display: flex;
+    justify-content: center;
+  }
   
   .logo img {
+    display: flex;
+    align-items: center;
     width: 100px;
     height: auto;
     margin-bottom: 20px;
+    border-radius: 50%;
   }
   
   h2 {
@@ -76,4 +84,16 @@
       justify-content: center;
     }
   }
+
+  .logout{
+    display: flex;
+    top:0;
+    border: none;
+  }
+
+  .logout :hover {
+    background: #ac1f1f;
+    border: none;
+  }
+  
   

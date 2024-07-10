@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const app = express();
+const Sales = require('./models/Sales.js');
 
 const PORT = process.envPORT || 3004;
 const HOST = '192.168.10.13'
@@ -155,7 +156,7 @@ app.post('/api/users', async (req, res) => {
   // Update user
   app.patch('/api/users/:id', async (req, res) => {
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+      const user = await User.findByIdAndUpdate(req.params.id, req.body);
       if (!user) {
         return res.status(404).send();
       }
@@ -177,6 +178,32 @@ app.post('/api/users', async (req, res) => {
       res.status(500).send(error);
     }
   });
+
+  app.post('/api/recordSale', async (req, res) => {
+    try {
+        const sale = new Sales({
+            ...req.body,
+            date: new Date()
+        });
+        await sale.save();
+        res.status(201).send({ success: true, data: sale });
+    } catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+});
+
+
+
+app.get('/api/getSales', async (req, res) => {
+  try {
+      console.log('Incoming request for getSales:', req);
+      const sales = await Sales.find();
+      res.status(200).send({ success: true, data: sales });
+  } catch (error) {
+      console.error('Error fetching sales:', error);
+      res.status(400).send({ success: false, message: error.message });
+  }
+});
 
 
 

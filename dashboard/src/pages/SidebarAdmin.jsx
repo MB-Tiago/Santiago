@@ -7,8 +7,14 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 
 function SidebarAdmin() {
+
+  const handleLogout = () => {
+    window.location.href = '/';
+};
   return (
-    <div className="sidebar">
+    <div className="">
+
+<div className="sidebar">
       <div className="logo">
         <img src="Order.png" alt="Logo" />
       </div>
@@ -24,10 +30,22 @@ function SidebarAdmin() {
           <Link to="/TiagoShop"><LocalOfferIcon></LocalOfferIcon>Shop</Link>
         </li>
         <li>
-          <Link to="/Reports"><AssessmentIcon></AssessmentIcon>Reports</Link>
+          <Link to="/SalesReport"><AssessmentIcon></AssessmentIcon>Reports</Link>
         </li>
       </ul>
+      <div className="logout">
+<button onClick={handleLogout}>Logout</button>
+
     </div>
+      
+    </div>
+
+    
+
+    </div>
+    
+
+
   );
 }
 
