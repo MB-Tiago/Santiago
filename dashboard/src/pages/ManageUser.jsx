@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, 
-  Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, 
-  Checkbox, FormControlLabel 
+  Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle 
 } from '@mui/material';
 import SidebarAdmin from './SidebarAdmin';
 import './ManageUser.css';
@@ -172,16 +171,6 @@ function ManageUser() {
             onChange={handleChange}
             required
           />
-          {/* <FormControlLabel
-            control={
-              <Checkbox
-                checked={form.agreedToUserAgreement}
-                onChange={handleChange}
-                name="agreedToUserAgreement"
-              />
-            }
-            label="Agreed to User Agreement"
-          /> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="primary">
@@ -212,14 +201,14 @@ function ManageUser() {
                   <TableCell>
                     <Button 
                       variant="contained" 
-                      color="secondary" 
+                      sx={{ backgroundColor: '#333', color: 'white', '&:hover': { backgroundColor: '#345' } }} 
                       onClick={() => handleEdit(user)}
                     >
                       Edit
                     </Button>
                     <Button 
                       variant="contained" 
-                      color="error" 
+                      sx={{ backgroundColor: '#ff4c4c', color: 'white', '&:hover': { backgroundColor: '#c80036' } }} 
                       onClick={() => handleDelete(user._id)}
                     >
                       Delete

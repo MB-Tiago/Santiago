@@ -34,9 +34,9 @@ function Login() {
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
 
-      // Navigate based on the role and redirectUrl received from the backend
+     
       navigate(redirectUrl);
-      window.location.reload(); // You may remove this line if not needed
+      window.location.reload();
     } catch (err) {
       if (err.response) {
         if (err.response.status === 400) {
@@ -68,7 +68,7 @@ function Login() {
                     setLoginIDError('');
                   }}
                   id="outlined-basic-1"
-                  label="Username"
+                  label="Username/UserID"
                   variant="outlined"
                   required
                   error={!!loginIDErr}

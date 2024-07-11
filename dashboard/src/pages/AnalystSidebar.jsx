@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './SidebarAdmin.css'; // Import the CSS file for styling
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import './AnalystSidebar.css';
 
-function SidebarAdmin() {
+function AnalystSidebar() {
 
   const handleLogout = () => {
     window.location.href = '/';
@@ -18,20 +19,14 @@ function SidebarAdmin() {
       <div className="logo">
         <img src="Order.png" alt="Logo" />
       </div>
-      <h2>Admin Panel</h2>
+      <h2>Sales Manager</h2>
       <ul>
         <li>
-          <Link to="/Dashboard"><DashboardIcon></DashboardIcon>Dashboard</Link>
+          <Link to="/SalesReport"><LoyaltyIcon></LoyaltyIcon>Sales Reports</Link>
         </li>
         <li>
-          <Link to="/ManageUser"><ManageAccountsIcon></ManageAccountsIcon>Manage User</Link>
+          <Link to="/SalesAnalysis"><AssessmentIcon></AssessmentIcon>Graph</Link>
         </li>
-        <li>
-          <Link to="/AdminDashboard"><LocalOfferIcon></LocalOfferIcon>Shop</Link>
-        </li>
-        {/* <li>
-          <Link to="/SalesReport"><AssessmentIcon></AssessmentIcon>Reports</Link>
-        </li> */}
       </ul>
       <div className="logout">
 <button onClick={handleLogout}>Logout</button>
@@ -49,4 +44,4 @@ function SidebarAdmin() {
   );
 }
 
-export default SidebarAdmin;
+export default AnalystSidebar;

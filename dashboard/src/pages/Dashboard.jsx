@@ -9,13 +9,13 @@ function Dashboard() {
             <div className="wrapper">
                 <div className='image-section'>
                     <div className="box">
-                        <img src="Order.png" alt="" />
+                        <img src="TiagoShop.png" alt="" />
                     </div>
 
                 </div>
                 <div className='image-section'>
                     <div className="box">
-                        <img src="topup.png" alt="background" />
+                        <img src="ml.png" alt="background" />
                     </div>
                 </div>
             </div>

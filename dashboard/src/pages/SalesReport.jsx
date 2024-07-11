@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './SalesReport.css';
+import AnalystDashboard from './AnalystSidebar';
 
 const SalesReport = () => {
     const [sales, setSales] = useState([]);
@@ -47,6 +48,7 @@ const SalesReport = () => {
 
     return (
         <div className="sales-report-container">
+            <AnalystDashboard />
             <h2>Sales Report</h2>
             <table className="sales-report-table">
                 <thead>

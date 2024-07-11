@@ -84,7 +84,7 @@ app.post('/register', async (req, res) => {
         if (user.userRole == 'admin') {
             user = await User.findOne({ userID: loginID });
             role = 'admin';
-            redirectUrl = '/AdminDashboard'; 
+            redirectUrl = '/Dashboard'; 
         }
 
         if (user.userRole == 'cashier') {
@@ -92,6 +92,11 @@ app.post('/register', async (req, res) => {
             role = 'cashier';
             redirectUrl = '/Billing'; 
         }
+        if (user.userRole == 'manager') {
+          user = await User.findOne({ userID: loginID });
+          role = 'manager';
+          redirectUrl = '/Manager'; 
+      }
 
         if (!user || user.password !== password) {
             return res.status(400).send({ message: 'Invalid login ID or password' });

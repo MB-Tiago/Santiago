@@ -9,6 +9,8 @@ import TiagoShop from './pages/TiagoShop';
 import Billing from './pages/Billing';
 import ManageUser from './pages/ManageUser';
 import SalesReport from './pages/SalesReport';
+import Manager from './pages/Manager';
+import SalesAnalysis from './pages/SalesAnalysis';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/Billing" element={<Billing />} />
         <Route path="/ManageUser" element={<ManageUser />} />
         <Route path="/SalesReport" element={<SalesReport />} />
+        <Route path="/Manager" element={<Manager />} />
+        <Route path="/SalesAnalysis" element={<SalesAnalysis />} />
        
       
       </Routes>
