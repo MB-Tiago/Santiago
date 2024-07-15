@@ -5,7 +5,7 @@ import AnalystDashboard from './AnalystSidebar';
 
 const SalesReport = () => {
     const [sales, setSales] = useState([]);
-    const [productCounts, setProductCounts] = useState({});
+    const [aggregatedSales, setAggregatedSales] = useState([]);
 
     useEffect(() => {
         fetchSales();
@@ -16,7 +16,7 @@ const SalesReport = () => {
             const response = await axios.get('http://192.168.10.13:3004/api/getSales');
             const reversedSales = response.data.data.reverse();
             setSales(reversedSales);
-            countProducts(reversedSales);
+            aggregateSales(reversedSales);
         } catch (error) {
             console.error('Error fetching sales:', error);
         }
@@ -34,16 +34,28 @@ const SalesReport = () => {
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
-    const countProducts = (salesData) => {
-        const counts = {};
+    const aggregateSales = (salesData) => {
+        const salesMap = {};
         salesData.forEach(sale => {
-            if (counts[sale.productName]) {
-                counts[sale.productName] += 1;
+            if (salesMap[sale.productName]) {
+                salesMap[sale.productName].count += 1;
+                salesMap[sale.productName].total += sale.price;
             } else {
-                counts[sale.productName] = 1;
+                salesMap[sale.productName] = {
+                    price: sale.price,
+                    count: 1,
+                    total: sale.price,
+                    date: sale.date
+                };
             }
         });
-        setProductCounts(counts);
+
+        const aggregatedSalesArray = Object.keys(salesMap).map(productName => ({
+            productName,
+            ...salesMap[productName]
+        }));
+
+        setAggregatedSales(aggregatedSalesArray);
     };
 
     return (
@@ -57,15 +69,17 @@ const SalesReport = () => {
                         <th>Price</th>
                         <th>Date</th>
                         <th>Number of Purchases</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sales.map((sale, index) => (
+                    {aggregatedSales.map((sale, index) => (
                         <tr key={index}>
                             <td>{sale.productName}</td>
                             <td>₱ {sale.price}</td>
                             <td>{formatDate(sale.date)}</td>
-                            <td>{productCounts[sale.productName]}</td>
+                            <td>{sale.count}</td>
+                            <td>₱ {sale.total}</td>
                         </tr>
                     ))}
                 </tbody>

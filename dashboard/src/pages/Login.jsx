@@ -34,7 +34,6 @@ function Login() {
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
 
-     
       navigate(redirectUrl);
       window.location.reload();
     } catch (err) {
@@ -56,6 +55,8 @@ function Login() {
   return (
     <>
       <Modal open={ModalStudOpen} onClose={handleCloseStudModal}>
+        <div className="bg">
+          {/* <img src="SSS.png" alt="" /> */}
         <div className="login-modal">
           <div className="main-login-form">
             <div className="login-form">
@@ -92,16 +93,13 @@ function Login() {
                 <Button variant="contained" onClick={handleCloseStudModal}>Cancel</Button>
                 <Button variant="contained" onClick={() => setRegisterModalOpen(true)}>Register</Button>
               </div>
-        
-             
             </div>
           </div>
         </div>
-
+        </div>
+        
       </Modal>
       <Register open={registerModalOpen} onClose={() => setRegisterModalOpen(false)} />
-
-
     </>
   );
 }
