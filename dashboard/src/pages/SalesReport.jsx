@@ -6,6 +6,8 @@ import AnalystDashboard from './AnalystSidebar';
 const SalesReport = () => {
     const [sales, setSales] = useState([]);
     const [aggregatedSales, setAggregatedSales] = useState([]);
+    const [totalSales, setTotalSales] = useState(0);
+    const [mostPurchasedProduct, setMostPurchasedProduct] = useState(null);
 
     useEffect(() => {
         fetchSales();
@@ -56,12 +58,26 @@ const SalesReport = () => {
         }));
 
         setAggregatedSales(aggregatedSalesArray);
+
+        // Calculate total sales
+        const total = aggregatedSalesArray.reduce((acc, sale) => acc + sale.total, 0);
+        setTotalSales(total);
+
+        // Find most purchased product
+        const mostPurchased = aggregatedSalesArray.reduce((max, sale) => (sale.count > max.count ? sale : max), aggregatedSalesArray[0]);
+        setMostPurchasedProduct(mostPurchased);
     };
 
     return (
         <div className="sales-report-container">
             <AnalystDashboard />
             <h2>Sales Report</h2>
+            <div className="sales-summary">
+                <p><strong>Total Sales:</strong> ₱ {totalSales}</p>
+                {mostPurchasedProduct && (
+                    <p><strong>Most Purchased Product:</strong> {mostPurchasedProduct.productName} ({mostPurchasedProduct.count} purchases)</p>
+                )}
+            </div>
             <table className="sales-report-table">
                 <thead>
                     <tr>

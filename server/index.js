@@ -86,16 +86,10 @@ app.post('/register', async (req, res) => {
             role = 'admin';
             redirectUrl = '/Dashboard'; 
         }
-
-        if (user.userRole == 'cashier') {
-            user = await User.findOne({ userID: loginID });
-            role = 'cashier';
-            redirectUrl = '/Billing'; 
-        }
         if (user.userRole == 'manager') {
           user = await User.findOne({ userID: loginID });
           role = 'manager';
-          redirectUrl = '/Manager'; 
+          redirectUrl = '/SalesReport'; 
       }
 
         if (!user || user.password !== password) {
