@@ -26,7 +26,7 @@ const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeC
                         value={billingDetails?.debitAccount}
                         onChange={handleBillingChange}
                     />
-                    <TextField
+                    {/* <TextField
                         name="creditAccount"
                         label="Bank Routing Number"
                         value={billingDetails?.creditAccount}
@@ -34,7 +34,7 @@ const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeC
                         InputProps={{
                             readOnly: true,
                         }}
-                    />
+                    /> */}
 
                 </div>
             )}
@@ -46,12 +46,12 @@ const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeC
                         value={billingDetails?.debitAccount}
                         onChange={handleBillingChange}
                     />
-                    <TextField
+                    {/* <TextField
                         name="creditAccount"
                         label="Bank Routing Number"
                         value="000000005"
                         onChange={handleBillingChange}
-                    />
+                    /> */}
                 </div>
             )}
             <h3>Total: ₱ {getTotalPrice()}</h3>

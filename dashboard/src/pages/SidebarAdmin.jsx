@@ -6,6 +6,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 
+
 function SidebarAdmin() {
 
   const handleLogout = () => {
@@ -28,6 +29,12 @@ function SidebarAdmin() {
         </li>
         <li>
           <Link to="/AdminDashboard"><LocalOfferIcon></LocalOfferIcon>Shop</Link>
+        </li>
+        <li>
+          <Link to="/SalesReport"><AssessmentIcon></AssessmentIcon>Sales Report</Link>
+        </li>
+        <li>
+          <Link to="/ShoppingList"><AssessmentIcon></AssessmentIcon>Shopping Lists</Link>
         </li>
         {/* <li>
           <Link to="/SalesReport"><AssessmentIcon></AssessmentIcon>Reports</Link>

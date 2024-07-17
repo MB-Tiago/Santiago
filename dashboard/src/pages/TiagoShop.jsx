@@ -83,7 +83,7 @@ const TiagoShop = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-
+            console.log(response.data)
             if (response.data.success) {
                 alert('Payment successful!');
 
@@ -108,6 +108,7 @@ const TiagoShop = () => {
                 // Clear cart and reset view to shop
                 setCart([]);
                 setView('shop');
+
             } else {
                 alert('Insufficient balance or account does not exist');
             }
@@ -132,7 +133,7 @@ const TiagoShop = () => {
             <nav className="navbar">
                 <Button onClick={() => handleViewChange('shop')}>Shop</Button>
                 <Button onClick={() => handleViewChange('cart')}>Cart ({cart.length})</Button>
-                
+
                 <Button onClick={handleLogout}>Logout</Button>
             </nav>
 
@@ -148,43 +149,43 @@ const TiagoShop = () => {
                     <div className="edit-menu-container">
                         {products.map((product) => (
                             <div key={product._id} className="card-edit">
-                                  <div className="image-container">
-                                  <img src={`http://192.168.10.13:3004/uploads/${product.image}`} alt={product.name} />
-                   
-                                    </div>
-                                    <div className="product-info">
+                                <div className="image-container">
+                                    <img src={`http://192.168.10.13:3004/uploads/${product.image}`} alt={product.name} />
+
+                                </div>
+                                <div className="product-info">
                                     <h3>{product.name}</h3>
-                                <p>{product.description}</p>
-                                <h4>₱ {product.price}</h4>
-                                <Button variant="contained" onClick={() => addToCart(product)}>Add to Cart</Button>
-                                    </div>
+                                    <p>{product.description}</p>
+                                    <h4>₱ {product.price}</h4>
+                                    <Button variant="contained" onClick={() => addToCart(product)}>Add to Cart</Button>
+                                </div>
 
                             </div>
                         ))}
                     </div>
                 </div>
-                
-            //     <div className="edit-menu-container">
-            //     {filteredProducts.map((pro) => (
-            //         <div
-            //             key={pro._id}
-            //             className="card-edit"
-            //             onClick={() => handleOpenEditModal(pro)}
-            //         >
-            //             <div className="image-container">
-            //                 <img
-            //                     src={`http://192.168.10.13:3004/uploads/${pro.image}`}
-            //                     alt="Product"
-            //                 />
-            //             </div>
-            //             <div className="product-info">
-            //                 <h2>{pro.name}</h2>
-            //                 <p>{pro.description}</p>
-            //                 <h3>${pro.price}</h3>
-            //             </div>
-            //         </div>
-            //     ))}
-            // </div>
+
+                //     <div className="edit-menu-container">
+                //     {filteredProducts.map((pro) => (
+                //         <div
+                //             key={pro._id}
+                //             className="card-edit"
+                //             onClick={() => handleOpenEditModal(pro)}
+                //         >
+                //             <div className="image-container">
+                //                 <img
+                //                     src={`http://192.168.10.13:3004/uploads/${pro.image}`}
+                //                     alt="Product"
+                //                 />
+                //             </div>
+                //             <div className="product-info">
+                //                 <h2>{pro.name}</h2>
+                //                 <p>{pro.description}</p>
+                //                 <h3>${pro.price}</h3>
+                //             </div>
+                //         </div>
+                //     ))}
+                // </div>
             )}
 
             {view === 'cart' && (

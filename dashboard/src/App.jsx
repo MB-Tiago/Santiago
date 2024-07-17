@@ -11,6 +11,7 @@ import ManageUser from './pages/ManageUser';
 import SalesReport from './pages/SalesReport';
 import Manager from './pages/Manager';
 import SalesAnalysis from './pages/SalesAnalysis';
+import ShoppingList from './pages/ShoppingList';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="/SalesReport" element={<SalesReport />} />
         <Route path="/Manager" element={<Manager />} />
         <Route path="/SalesAnalysis" element={<SalesAnalysis />} />
+        <Route path="/ShoppingList" element={<ShoppingList />} />
+       
        
       
       </Routes>
