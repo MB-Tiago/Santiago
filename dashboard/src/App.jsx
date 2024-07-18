@@ -13,6 +13,7 @@ import Manager from './pages/Manager';
 import SalesAnalysis from './pages/SalesAnalysis';
 import ShoppingList from './pages/ShoppingList';
 
+
 function App() {
   return (
     <BrowserRouter>
