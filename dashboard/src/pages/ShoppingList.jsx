@@ -7,6 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import './ShoppingList.css';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const items = [
   { url: "http://192.168.10.12/YACAPIN", img: "WNE.png", caption: "Watch and Earn" },
@@ -22,8 +24,8 @@ const items = [
   { url: "http://192.168.10.26", img: "Logo.jpg", caption: "ShoePatoes" },
   { url: "http://192.168.10.24", img: "NationalBookStore.jpg", caption: "National BookStore" },
   { url: "http://192.168.10.25", img: "SavemoreLogo.png", caption: "SaveMore" },
-  { url: "http://192.168.10.26", img: "Order.png", caption: "Order 26" },
-  { url: "http://192.168.10.27", img: "Order.png", caption: "Order 27" },
+  { url: "http://192.168.10.37", img: "ParaPo.png", caption: "Para Po" },
+  { url: "http://192.168.10.23/moto", img: "Motortrade.jpg", caption: "Motortrade" },
   { url: "http://192.168.10.28", img: "Order.png", caption: "Order 28" },
   { url: "http://192.168.10.29", img: "Order.png", caption: "Order 29" },
   { url: "http://192.168.10.30", img: "Order.png", caption: "Order 30" },
@@ -38,11 +40,22 @@ const items = [
   { url: "http://192.168.10.39", img: "Order.png", caption: "Order 39" },
   { url: "http://192.168.10.40", img: "Order.png", caption: "Order 40" },
 ];
+ 
+
+
 
 function ShoppingList() {
+  const navigate = useNavigate();
+
+  const goToTiagoshop = () => {
+    navigate('/TiagoShop');
+  };
+  
   return (
+    
     <div className="container">
       <h2>Shopping List</h2>
+      <Button onClick={goToTiagoshop}> TiagoShop </Button>
 <Grid container spacing={2} className="grid-container">
       {items.map((item, index) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
