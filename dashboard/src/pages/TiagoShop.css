@@ -30,6 +30,10 @@
 
 }
 
+.h2{
+    text-align:left;
+}
+
 /* .products-list {
     display: flex;
     flex-wrap: wrap;

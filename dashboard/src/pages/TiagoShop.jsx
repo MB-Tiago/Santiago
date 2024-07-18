@@ -3,9 +3,12 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import './TiagoShop.css';
 import Billing from './Billing';
+import { useNavigate } from 'react-router-dom';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import SalesReport from './SalesReport';
 
 const TiagoShop = () => {
+    const navigate = useNavigate();
     const [view, setView] = useState('shop');
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
@@ -34,6 +37,11 @@ const TiagoShop = () => {
             console.error('Error fetching products:', error);
         }
     };
+
+
+    const goToShoppingLists = () => {
+        navigate('/shoppinglist');
+      };
 
     const addToCart = (product) => {
         setCart((prevCart) => [...prevCart, product]);
@@ -130,7 +138,9 @@ const TiagoShop = () => {
 
     return (
         <div className="app-container">
+
             <nav className="navbar">
+
                 <Button onClick={() => handleViewChange('shop')}>Shop</Button>
                 <Button onClick={() => handleViewChange('cart')}>Cart ({cart.length})</Button>
 
@@ -143,6 +153,9 @@ const TiagoShop = () => {
 
                         <div className="tiagoshop">
                             <h2>TiagoShop</h2>
+
+                            <Button onClick={goToShoppingLists} ><StorefrontIcon></StorefrontIcon>Shopping Lists</Button>
+
                         </div>
                     </div>
 
