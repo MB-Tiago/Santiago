@@ -48,6 +48,10 @@ app.listen(3004, '192.168.10.13', () => {
     console.log(`Listening: http://192.168.10.13:3004`);
 })
 
+app.get('/', (req, res) => {
+  res.json('Hello, world!')
+})
+
 ConnectToDatabase()
 
 
