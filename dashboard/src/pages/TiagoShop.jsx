@@ -154,7 +154,7 @@ const TiagoShop = () => {
                         <div className="tiagoshop">
                             <h2>TiagoShop</h2>
 
-                            <Button onClick={goToShoppingLists} ><StorefrontIcon></StorefrontIcon>Shopping Lists</Button>
+                            {/* <Button onClick={goToShoppingLists} ><StorefrontIcon></StorefrontIcon>Shopping Lists</Button> */}
 
                         </div>
                     </div>
