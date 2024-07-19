@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const Sales = require('./models/Sales.js');
 
+
 const PORT = process.envPORT || 3004;
 const HOST = '192.168.10.13'
 

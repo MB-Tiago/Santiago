@@ -24,9 +24,18 @@
     color: white;
 }
 
-.shop-container, .cart-container, .billing-container {
+.shop-container, .billing-container {
     padding: 20px;
 
+}
+.cart-container{
+    align-items: center;
+    width: 20%;
+    padding: 50px;
+    text-align: left;
+    margin: 700px;
+    margin-top: 0;
+    margin-bottom: 0;
 
 }
 
