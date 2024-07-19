@@ -32,7 +32,7 @@ const SalesAnalysis = () => {
 
     const fetchSales = async () => {
         try {
-            const response = await axios.get('http://192.168.10.13:3004/api/getSales');
+            const response = await axios.get('https://server-two-blue.vercel.app/api/getSales');
             const reversedSales = response.data.data.reverse();
             countProducts(reversedSales);
         } catch (error) {

@@ -27,7 +27,7 @@ const TiagoShop = () => {
         try {
             const routingNumber = "000000005";
 
-            const response = await axios.get('http://192.168.10.13:3004/getallproducts');
+            const response = await axios.get('https://server-two-blue.vercel.app/getallproducts');
             setProducts(response.data.data);
             setValues((prev) => ({
                 ...prev,
@@ -82,7 +82,7 @@ const TiagoShop = () => {
             const credit = values.creditAccount;
             const amount = getTotalPrice();
 
-            const response = await axios.post('http://192.168.10.14:3001/api/unionbank/transfertransaction', {
+            const response = await axios.post('https://server-two-blue.vercel.app/api/unionbank/transfertransaction', {
                 debitAccount: debit,
                 creditAccount: credit,
                 amount: amount
@@ -105,7 +105,7 @@ const TiagoShop = () => {
                     console.log('Sending sale record:', salePayload);
 
                     // Send sale record to backend
-                    const saleResponse = await axios.post('http://192.168.10.13:3004/api/recordSale', salePayload);
+                    const saleResponse = await axios.post('https://server-two-blue.vercel.app/api/recordSale', salePayload);
 
                     if (!saleResponse.data.success) {
                         console.error('Failed to record sale:', saleResponse.data.message);
@@ -163,7 +163,7 @@ const TiagoShop = () => {
                         {products.map((product) => (
                             <div key={product._id} className="card-edit">
                                 <div className="image-container">
-                                    <img src={`http://192.168.10.13:3004/uploads/${product.image}`} alt={product.name} />
+                                    <img src={`https://server-two-blue.vercel.app/uploads/${product.image}`} alt={product.name} />
 
                                 </div>
                                 <div className="product-info">

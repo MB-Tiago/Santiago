@@ -26,7 +26,7 @@ function Register({ open, onClose }) {
       return;
     }
     try {
-      const response = await axios.post('http://192.168.10.13:3004/register', {
+      const response = await axios.post('https://server-two-blue.vercel.app/register', {
         registerID,
         registerPassword,
         bankAccount,

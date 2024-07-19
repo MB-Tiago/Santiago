@@ -103,7 +103,7 @@ const AdminDashboard = () => {
             formData.append('productDescription', productDescription);
             formData.append('image', productImage);
 
-            const AddProduct = await axios.post('http://192.168.10.13:3004/addproduct', formData, {
+            const AddProduct = await axios.post('https://server-two-blue.vercel.app/addproduct', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -126,7 +126,7 @@ const AdminDashboard = () => {
 
     const handleDeleteProduct = async () => {
         try {
-            await axios.post('http://192.168.10.13:3004/deleteproduct', { productId: selectedProduct._id });
+            await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });
             setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
             handleCloseEditModal();
         } catch (error) {
@@ -155,7 +155,7 @@ const AdminDashboard = () => {
                 productPrice,
                 productDescription
             };
-            const response = await axios.post('http://192.168.10.13:3004/editproduct', data, {
+            const response = await axios.post('https://server-two-blue.vercel.app/editproduct', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
     };
 
     const fetchMenu = async () => {
-        const menu = await axios.get('http://192.168.10.13:3004/getallproducts');
+        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
         setValues(menu?.data?.data);
     };
 
@@ -267,7 +267,7 @@ const AdminDashboard = () => {
                             <div className="image-container">
                                 {selectedProduct.image ? (
                                     <img
-                                        src={`http://192.168.10.13:3004/uploads/${selectedProduct.image}`}
+                                        src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
                                         alt="Product"
                                     />
                                 ) : (
@@ -328,7 +328,7 @@ const AdminDashboard = () => {
                     >
                         <div className="image-container">
                             <img
-                                src={`http://192.168.10.13:3004/uploads/${pro.image}`}
+                                src={`https://server-two-blue.vercel.app/uploads/${pro.image}`}
                                 alt="Product"
                             />
                         </div>

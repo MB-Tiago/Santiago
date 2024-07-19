@@ -26,7 +26,7 @@ function ManageUser() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://192.168.10.13:3004/api/users');
+      const response = await axios.get('https://server-two-blue.vercel.app/api/users');
       console.log('API Response:', response.data); // Debug: Log API response
       setUsers(response.data);
     } catch (error) {
@@ -56,9 +56,9 @@ function ManageUser() {
       console.log('Submitting payload:', payload); // Debug: Log payload
       
       if (editingUser) {
-        await axios.patch(`http://192.168.10.13:3004/api/users/${editingUser._id}`, payload);
+        await axios.patch(`https://server-two-blue.vercel.app/api/users/${editingUser._id}`, payload);
       } else {
-        await axios.post('http://192.168.10.13:3004/api/users', payload);
+        await axios.post('https://server-two-blue.vercel.app/api/users', payload);
       }
       
       setForm({
@@ -100,7 +100,7 @@ function ManageUser() {
 
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`http://192.168.10.13:3004/api/users/${userId}`);
+      await axios.delete(`https://server-two-blue.vercel.app/api/users/${userId}`);
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);

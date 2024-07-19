@@ -17,7 +17,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://192.168.10.13:3004/login', { loginID, password });
+      const response = await axios.post('https://server-two-blue.vercel.app/login', { loginID, password });
       const { token, role, redirectUrl } = response.data;
 
       localStorage.setItem('token', token);

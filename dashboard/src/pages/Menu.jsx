@@ -11,7 +11,7 @@ function Menu() {
     }, [])
 
     const fetchMenu = async () => {
-        const menu = await axios.get('http://192.168.10.13:3004/getallproducts')
+        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts')
         setValues(menu?.data?.data)
     }
     return (
@@ -24,7 +24,7 @@ function Menu() {
                     values?.map((pro) => (
                         <div key={pro?._id} className="card">
                             <div className="image-container">
-                                <img src={`http://192.168.10.13:3004/uploads/${pro?.image}`} alt='' />
+                                <img src={`https://server-two-blue.vercel.app/uploads/${pro?.image}`} alt='' />
                             </div>
                             <div className='label'>
                             <h3>{pro?.name}</h3>
