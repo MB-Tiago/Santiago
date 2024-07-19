@@ -6,15 +6,15 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const app = express();
-const Sales = require('./models/Sales.js');
+const Sales = require('../models/Sales.js');
 
 
 const PORT = process.envPORT || 3004;
 const HOST = '192.168.10.13'
 
-const User = require('./models/userData');
-const adminModel = require('./models/adminData.js');
-const Products = require('./models/productModel.js');
+const User = require('../models/userData.js');
+const adminModel = require('../models/adminData.js');
+const Products = require('../models/productModel.js');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'uploads');
@@ -44,8 +44,8 @@ const ConnectToDatabase = async () => {
     }
 }
 
-app.listen(3004, '192.168.10.13', () => {
-    console.log(`Listening: http://192.168.10.13:3004`);
+app.listen(3004, () => {
+    console.log(`Listening: 3004`);
 })
 
 app.get('/', (req, res) => {
