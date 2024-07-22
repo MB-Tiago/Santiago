@@ -82,7 +82,7 @@ const TiagoShop = () => {
             const credit = values.creditAccount;
             const amount = getTotalPrice();
 
-            const response = await axios.post('https://server-two-blue.vercel.app/api/unionbank/transfertransaction', {
+            const response = await axios.post('http://192.168.10.14:3001/api/unionbank/transfertransaction', {
                 debitAccount: debit,
                 creditAccount: credit,
                 amount: amount
