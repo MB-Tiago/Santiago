@@ -242,6 +242,8 @@ app.post('/addproduct', upload.single('image'), async (req, res) => {
 
     const savedProduct = await newProduct.save();
 
+    console.log('From server: ', savedProduct)
+
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
   } catch (error) {
     res.status(500).json({ success: false, message: `Product failed to add: ${error.message}` });
