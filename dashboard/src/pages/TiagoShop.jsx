@@ -19,6 +19,8 @@ const TiagoShop = () => {
         amount: ''
     });
 
+    
+
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -137,6 +139,7 @@ const TiagoShop = () => {
     };
 
     return (
+        
         <div className="app-container">
 
             <nav className="navbar">
