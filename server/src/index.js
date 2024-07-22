@@ -17,7 +17,7 @@ const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads');
+    const uploadDir = '/uploads'; // Use /tmp directory for serverless environments
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
     }
@@ -27,6 +27,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
 
 const upload = multer({ storage: storage });
 
