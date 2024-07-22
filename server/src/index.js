@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 app.use(express.json());
 app.use(cors({
   origin: 'https://tiagoshop.vercel.app',
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'ADD']
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT']
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
