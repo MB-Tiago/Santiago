@@ -97,23 +97,23 @@ const AdminDashboard = () => {
         try {
             console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
-
+    
             if (!productName || !productPrice || !productDescription || !productImage) {
                 console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
-
+    
             if (!(productImage instanceof File)) {
                 console.error('Invalid image file');
                 return alert('Please select a valid image file');
             }
-
+    
             console.log('Image details:', productImage.name, productImage.type, productImage.size);
-
+    
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
             cloudinaryData.append('upload_preset', 'ml_default'); // Adjust as necessary
-
+    
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
                 `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
@@ -124,17 +124,17 @@ const AdminDashboard = () => {
                     }
                 }
             );
-
+    
             console.log('Cloudinary response received:', cloudinaryResponse.data);
             const imageUrl = cloudinaryResponse.data.secure_url;
-
+    
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
                 imageUrl
             };
-
+    
             console.log('Sending product data to server:', productData);
             const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
                 headers: {
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
                 }
             });
             console.log('Server response:', addProductResponse.data);
-
+    
             setProducts({
                 productName: '',
                 productPrice: '',
@@ -150,11 +150,11 @@ const AdminDashboard = () => {
                 productImageUrl: '',
                 productImage: null
             });
-
+    
             console.log('Product state reset');
             fetchMenu();
             console.log('Menu refreshed');
-
+    
             alert('Product added successfully!');
         } catch (error) {
             console.error('Error adding product:', error);
@@ -173,8 +173,8 @@ const AdminDashboard = () => {
             console.log('Modal closed');
         }
     };
-
-
+    
+    
 
 
     const handleDeleteProduct = async () => {
@@ -379,23 +379,16 @@ const AdminDashboard = () => {
                         className="card-edit"
                         onClick={() => handleOpenEditModal(pro)}
                     >
-                        <div className="edit-menu-container">
-                            {filteredProducts.map((pro) => (
-                                <div
-                                    key={pro._id}
-                                    className="card-edit"
-                                    onClick={() => handleOpenEditModal(pro)}
-                                >
-                                    <div className="image-container">
-                                        <DisplayImage publicId={pro.image} /> {/* Use Cloudinary image component */}
-                                    </div>
-                                    <div className="product-info">
-                                        <h2>{pro.name}</h2>
-                                        <p>{pro.description}</p>
-                                        <h3>${pro.price}</h3>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="image-container">
+                            <img
+                                src={`https://server-two-blue.vercel.app/uploads/${pro.image}`}
+                                alt="Product"
+                            />
+                        </div>
+                        <div className="product-info">
+                            <h2>{pro.name}</h2>
+                            <p>{pro.description}</p>
+                            <h3>${pro.price}</h3>
                         </div>
                     </div>
                 ))}
