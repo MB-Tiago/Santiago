@@ -105,7 +105,7 @@ const handleAddProduct = async () => {
         // Upload image to Cloudinary first
         const cloudinaryData = new FormData();
         cloudinaryData.append('file', productImage);
-        cloudinaryData.append('upload_preset', 'products');
+        cloudinaryData.append('upload_preset', 'tiagoshop');
 
         const cloudinaryResponse = await axios.post(
             `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
