@@ -93,28 +93,46 @@ const AdminDashboard = () => {
 
     const handleAddProduct = async () => {
         try {
-            console.log('Before actions');
+            console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
     
             // Ensure all required fields are provided
             if (!productName || !productPrice || !productDescription || !productImage) {
+                console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
     
-            // Create FormData object
-            const formData = new FormData();
-            formData.append('productName', productName);
-            formData.append('productPrice', productPrice);
-            formData.append('productDescription', productDescription);
-            formData.append('image', productImage);
+            console.log('Preparing to upload image to Cloudinary');
+            // Upload image to Cloudinary first
+            const cloudinaryData = new FormData();
+            cloudinaryData.append('file', productImage);
+            cloudinaryData.append('upload_preset', 'tiagoshop'); // Changed to 'tiagoshop'
     
-            // Send POST request
-            const AddProduct = await axios.post('https://server-two-blue.vercel.app/addproduct', formData, {
+            console.log('Sending request to Cloudinary');
+            const cloudinaryResponse = await axios.post(
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                cloudinaryData
+            );
+    
+            console.log('Cloudinary response received:', cloudinaryResponse.data);
+            const imageUrl = cloudinaryResponse.data.secure_url;
+    
+            // Create data object to send to your server
+            const productData = {
+                productName,
+                productPrice,
+                productDescription,
+                imageUrl
+            };
+    
+            console.log('Sending product data to server:', productData);
+            // Send POST request to your server
+            const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             });
-            console.log('From axios: ', AddProduct);
+            console.log('Server response:', addProductResponse.data);
     
             // Reset product state
             setProducts({
@@ -125,32 +143,26 @@ const AdminDashboard = () => {
                 productImage: null
             });
     
+            console.log('Product state reset');
             // Refresh the menu
             fetchMenu();
+            console.log('Menu refreshed');
         } catch (error) {
             console.error('Error adding product:', error);
-            alert('Error adding product!');
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+            alert('Error adding product: ' + (error.response?.data?.message || error.message));
         } finally {
             setModalAddOpen(false);
+            console.log('Modal closed');
         }
-    };
-    
-    const handleDeleteProduct = async () => {
-        try {
-            await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });
-            setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
-            handleCloseEditModal();
-        } catch (error) {
-            alert('Error deleting product!', error);
-        }
-    };
-
-    const handleEditChange = (e) => {
-        const { name, value } = e.target;
-        setSelectedProduct((prev) => ({
-            ...prev,
-            [name]: value
-        }));
     };
 
     const handleUpdateProduct = async () => {
