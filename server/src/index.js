@@ -7,7 +7,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const app = express();
 const Sales = require('../models/Sales.js');
-
+const cloudinary = require('cloudinary').v2;
 
 const PORT = process.envPORT || 3004;
 const HOST = '192.168.10.13'
@@ -16,22 +16,29 @@ const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true }); // Ensure recursive creation
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+cloudinary.config({ 
+  cloud_name: 'dnw3vru0m', 
+        api_key: '866971629383898', 
+        api_secret: '<Gwq7Oje7yx1d0RRGN09iWon19qg>' 
 });
 
 
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const uploadDir = path.join(__dirname, 'uploads');
+//     if (!fs.existsSync(uploadDir)) {
+//       fs.mkdirSync(uploadDir, { recursive: true }); // Ensure recursive creation
+//     }
+//     cb(null, uploadDir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   }
+// });
 
+
+
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(express.json());
@@ -232,21 +239,31 @@ app.post('/adduser', upload.single('image'), async (req, res) => {
 app.post('/addproduct', upload.single('image'), async (req, res) => {
   try {
     const { productName, productDescription, productPrice } = req.body;
-    const productImage = req.file.filename;
     const productId = Math.floor(Math.random() * 100000);
-    console.log(productImage)
+
+    // Upload image to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "products" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: productImage
+      image: result.secure_url // Use the Cloudinary URL
     });
 
     const savedProduct = await newProduct.save();
 
-    console.log('From server: ', savedProduct)
+    console.log('From server: ', savedProduct);
 
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
   } catch (error) {
