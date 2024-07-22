@@ -92,62 +92,93 @@ const AdminDashboard = () => {
     };
 
 
-const handleAddProduct = async () => {
-    try {
-        console.log('Before actions');
-        const { productName, productPrice, productDescription, productImage } = products;
-
-        // Ensure all required fields are provided
-        if (!productName || !productPrice || !productDescription || !productImage) {
-            return alert('Fields must not be empty!');
-        }
-
-        // Upload image to Cloudinary first
-        const cloudinaryData = new FormData();
-        cloudinaryData.append('file', productImage);
-        cloudinaryData.append('upload_preset', 'ml_default');
-
-        const cloudinaryResponse = await axios.post(
-            `https://api.cloudinary.com/v1_1/dnw3vru0m/products/upload`,
-            cloudinaryData
-        );
-
-        const imageUrl = cloudinaryResponse.data.secure_url;
-
-        // Create data object to send to your server
-        const productData = {
-            productName,
-            productPrice,
-            productDescription,
-            imageUrl
-        };
-
-        // Send POST request to your server
-        const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
-            headers: {
-                'Content-Type': 'application/json'
+    const handleAddProduct = async () => {
+        try {
+            console.log('Starting product addition process');
+            const { productName, productPrice, productDescription, productImage } = products;
+    
+            // Ensure all required fields are provided
+            if (!productName || !productPrice || !productDescription || !productImage) {
+                console.log('Missing required fields');
+                return alert('Fields must not be empty!');
             }
-        });
-        console.log('From axios: ', addProductResponse);
-
-        // Reset product state
-        setProducts({
-            productName: '',
-            productPrice: '',
-            productDescription: '',
-            productImageUrl: '',
-            productImage: null
-        });
-
-        // Refresh the menu
-        fetchMenu();
-    } catch (error) {
-        console.error('Error adding product:', error);
-        alert('Error adding product!');
-    } finally {
-        setModalAddOpen(false);
-    }
-};
+    
+            // Check if productImage is a valid File object
+            if (!(productImage instanceof File)) {
+                console.error('Invalid image file');
+                return alert('Please select a valid image file');
+            }
+    
+            console.log('Image details:', productImage.name, productImage.type, productImage.size);
+    
+            // Upload image to Cloudinary
+            const cloudinaryData = new FormData();
+            cloudinaryData.append('file', productImage);
+            cloudinaryData.append('upload_preset', 'ml_default'); // Make sure this preset exists and is correctly configured
+    
+            console.log('Sending request to Cloudinary');
+            const cloudinaryResponse = await axios.post(
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                cloudinaryData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+    
+            console.log('Cloudinary response received:', cloudinaryResponse.data);
+            const imageUrl = cloudinaryResponse.data.secure_url;
+    
+            // Create data object to send to your server
+            const productData = {
+                productName,
+                productPrice,
+                productDescription,
+                imageUrl
+            };
+    
+            console.log('Sending product data to server:', productData);
+            // Send POST request to your server
+            const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Server response:', addProductResponse.data);
+    
+            // Reset product state
+            setProducts({
+                productName: '',
+                productPrice: '',
+                productDescription: '',
+                productImageUrl: '',
+                productImage: null
+            });
+    
+            console.log('Product state reset');
+            // Refresh the menu
+            fetchMenu();
+            console.log('Menu refreshed');
+            
+            alert('Product added successfully!');
+        } catch (error) {
+            console.error('Error adding product:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+            alert('Error adding product: ' + (error.response?.data?.message || error.message));
+        } finally {
+            setModalAddOpen(false);
+            console.log('Modal closed');
+        }
+    };
 
 
     const handleDeleteProduct = async () => {
