@@ -108,7 +108,7 @@ const handleAddProduct = async () => {
         cloudinaryData.append('upload_preset', 'ml_default');
 
         const cloudinaryResponse = await axios.post(
-            `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+            `https://api.cloudinary.com/v1_1/dnw3vru0m/products/upload`,
             cloudinaryData
         );
 
