@@ -93,6 +93,7 @@ const AdminDashboard = () => {
 
     const handleAddProduct = async () => {
         try {
+            console.log('Before actions');
             const { productName, productPrice, productDescription, productImage, productImageUrl } = products;
 
             if (!productName || !productPrice || !productDescription || !productImageUrl) return alert('Fields must not be empty!');
