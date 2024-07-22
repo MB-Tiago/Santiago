@@ -77,7 +77,7 @@ const TiagoShop = () => {
 
     const handleBillingSubmit = async () => {
         try {
-            const token = "$2b$10$amvwS7BRJVXXA8Gmkw0cu.5shavuIjQB2HqIJj7CSrF5JMBsUNON6";
+            const token = "$2b$10$UrrLuNtzp7jnfRiM0hoSpe6rRzarbbtpfVKUmAUd2pKMSLgtsuo/q";
             const debit = values.debitAccount;
             const credit = values.creditAccount;
             const amount = getTotalPrice();
