@@ -94,22 +94,29 @@ const AdminDashboard = () => {
     const handleAddProduct = async () => {
         try {
             console.log('Before actions');
-            const { productName, productPrice, productDescription, productImage, productImageUrl } = products;
-
-            if (!productName || !productPrice || !productDescription || !productImageUrl) return alert('Fields must not be empty!');
-
+            const { productName, productPrice, productDescription, productImage } = products;
+    
+            // Ensure all required fields are provided
+            if (!productName || !productPrice || !productDescription || !productImage) {
+                return alert('Fields must not be empty!');
+            }
+    
+            // Create FormData object
             const formData = new FormData();
             formData.append('productName', productName);
             formData.append('productPrice', productPrice);
             formData.append('productDescription', productDescription);
             formData.append('image', productImage);
-
+    
+            // Send POST request
             const AddProduct = await axios.post('https://server-two-blue.vercel.app/addproduct', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             console.log('From axios: ', AddProduct);
+    
+            // Reset product state
             setProducts({
                 productName: '',
                 productPrice: '',
@@ -117,14 +124,17 @@ const AdminDashboard = () => {
                 productImageUrl: '',
                 productImage: null
             });
+    
+            // Refresh the menu
             fetchMenu();
         } catch (error) {
-            alert('Error adding product!', error);
+            console.error('Error adding product:', error);
+            alert('Error adding product!');
         } finally {
             setModalAddOpen(false);
         }
     };
-
+    
     const handleDeleteProduct = async () => {
         try {
             await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });

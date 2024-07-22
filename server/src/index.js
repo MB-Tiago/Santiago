@@ -15,11 +15,13 @@ const HOST = '192.168.10.13'
 const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = '/uploads'; // Use /tmp directory for serverless environments
+    const uploadDir = path.join(__dirname, 'uploads');
     if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
+      fs.mkdirSync(uploadDir, { recursive: true }); // Ensure recursive creation
     }
     cb(null, uploadDir);
   },
@@ -27,6 +29,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
 
 
 const upload = multer({ storage: storage });
