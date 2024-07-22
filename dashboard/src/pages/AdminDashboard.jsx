@@ -106,7 +106,7 @@ const AdminDashboard = () => {
             // Upload image to Cloudinary first
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'tiagoshop'); // Changed to 'tiagoshop'
+            cloudinaryData.append('upload_preset', 'ml_default');
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
@@ -163,6 +163,23 @@ const AdminDashboard = () => {
             setModalAddOpen(false);
             console.log('Modal closed');
         }
+    };
+    const handleDeleteProduct = async () => {
+        try {
+            await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });
+            setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
+            handleCloseEditModal();
+        } catch (error) {
+            alert('Error deleting product!', error);
+        }
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setSelectedProduct((prev) => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleUpdateProduct = async () => {
