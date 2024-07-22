@@ -96,19 +96,17 @@ const AdminDashboard = () => {
             console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
     
-            // Ensure all required fields are provided
-            if (!productName || !productPrice || !productDescription || !productImage) {
-                console.log('Missing required fields');
-                return alert('Fields must not be empty!');
+            if (!productImage || !(productImage instanceof File)) {
+                console.error('Invalid or missing image file');
+                return alert('Please select a valid image file');
             }
     
-            console.log('Preparing to upload image to Cloudinary');
-            // Upload image to Cloudinary first
+            console.log('Image details:', productImage.name, productImage.type, productImage.size);
+    
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'ml_default');
+            cloudinaryData.append('upload_preset', 'tiagoshop'); // Make sure this matches your Cloudinary preset name
     
-            console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
                 `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
                 cloudinaryData
@@ -149,19 +147,10 @@ const AdminDashboard = () => {
             console.log('Menu refreshed');
         } catch (error) {
             console.error('Error adding product:', error);
-            if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
+            if (error.response && error.response.data && error.response.data.error) {
+                console.error('Cloudinary error details:', error.response.data.error);
             }
-            alert('Error adding product: ' + (error.response?.data?.message || error.message));
-        } finally {
-            setModalAddOpen(false);
-            console.log('Modal closed');
+            alert('Error adding product: ' + (error.response?.data?.error?.message || error.message));
         }
     };
     const handleDeleteProduct = async () => {
