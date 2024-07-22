@@ -25,7 +25,7 @@ const TiagoShop = () => {
 
     const fetchProducts = async () => {
         try {
-            const routingNumber = "000000005";
+            const routingNumber = "000000001"
 
             const response = await axios.get('https://server-two-blue.vercel.app/getallproducts');
             setProducts(response.data.data);
