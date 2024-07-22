@@ -91,49 +91,30 @@ const AdminDashboard = () => {
         });
     };
 
-
     const handleAddProduct = async () => {
         try {
-            console.log('Starting product addition process');
+            console.log('Before actions');
             const { productName, productPrice, productDescription, productImage } = products;
     
             // Ensure all required fields are provided
             if (!productName || !productPrice || !productDescription || !productImage) {
-                console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
     
-            console.log('Preparing to upload image to Cloudinary');
-            // Upload image to Cloudinary first
-            const cloudinaryData = new FormData();
-            cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'ml_default');
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('productName', productName);
+            formData.append('productPrice', productPrice);
+            formData.append('productDescription', productDescription);
+            formData.append('image', productImage);
     
-            console.log('Sending request to Cloudinary');
-            const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
-                cloudinaryData
-            );
-    
-            console.log('Cloudinary response received:', cloudinaryResponse.data);
-            const imageUrl = cloudinaryResponse.data.secure_url;
-    
-            // Create data object to send to your server
-            const productData = {
-                productName,
-                productPrice,
-                productDescription,
-                imageUrl
-            };
-    
-            console.log('Sending product data to server:', productData);
-            // Send POST request to your server
-            const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
+            // Send POST request
+            const AddProduct = await axios.post('https://server-two-blue.vercel.app/addproduct', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('Server response:', addProductResponse.data);
+            console.log('From axios: ', AddProduct);
     
             // Reset product state
             setProducts({
@@ -144,25 +125,13 @@ const AdminDashboard = () => {
                 productImage: null
             });
     
-            console.log('Product state reset');
             // Refresh the menu
             fetchMenu();
-            console.log('Menu refreshed');
         } catch (error) {
             console.error('Error adding product:', error);
-            if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
-            }
-            alert('Error adding product: ' + (error.response?.data?.message || error.message));
+            alert('Error adding product!');
         } finally {
             setModalAddOpen(false);
-            console.log('Modal closed');
         }
     };
     
