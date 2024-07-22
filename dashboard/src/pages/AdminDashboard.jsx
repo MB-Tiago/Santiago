@@ -97,13 +97,11 @@ const AdminDashboard = () => {
             console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
     
-            // Ensure all required fields are provided
             if (!productName || !productPrice || !productDescription || !productImage) {
                 console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
     
-            // Check if productImage is a valid File object
             if (!(productImage instanceof File)) {
                 console.error('Invalid image file');
                 return alert('Please select a valid image file');
@@ -111,14 +109,13 @@ const AdminDashboard = () => {
     
             console.log('Image details:', productImage.name, productImage.type, productImage.size);
     
-            // Upload image to Cloudinary
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'ml_default'); // Make sure this preset exists and is correctly configured
+            cloudinaryData.append('upload_preset', 'ml_default');
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,  // Corrected URL
                 cloudinaryData,
                 {
                     headers: {
@@ -130,7 +127,6 @@ const AdminDashboard = () => {
             console.log('Cloudinary response received:', cloudinaryResponse.data);
             const imageUrl = cloudinaryResponse.data.secure_url;
     
-            // Create data object to send to your server
             const productData = {
                 productName,
                 productPrice,
@@ -139,7 +135,6 @@ const AdminDashboard = () => {
             };
     
             console.log('Sending product data to server:', productData);
-            // Send POST request to your server
             const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -147,7 +142,6 @@ const AdminDashboard = () => {
             });
             console.log('Server response:', addProductResponse.data);
     
-            // Reset product state
             setProducts({
                 productName: '',
                 productPrice: '',
@@ -157,7 +151,6 @@ const AdminDashboard = () => {
             });
     
             console.log('Product state reset');
-            // Refresh the menu
             fetchMenu();
             console.log('Menu refreshed');
             
