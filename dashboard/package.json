@@ -16,6 +16,7 @@
     "@mui/material": "^5.16.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "cors": "^2.8.5",
     "leaflet": "^1.9.4",
     "mongoose": "^8.4.4",
     "node": "^20.15.0",
