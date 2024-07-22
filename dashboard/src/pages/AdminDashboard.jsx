@@ -111,11 +111,11 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'ml_default');
+            cloudinaryData.append('upload_preset', 'unsigned'); // Adjust as necessary
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,  // Corrected URL
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
                 cloudinaryData,
                 {
                     headers: {
@@ -153,7 +153,7 @@ const AdminDashboard = () => {
             console.log('Product state reset');
             fetchMenu();
             console.log('Menu refreshed');
-            
+    
             alert('Product added successfully!');
         } catch (error) {
             console.error('Error adding product:', error);
@@ -172,55 +172,7 @@ const AdminDashboard = () => {
             console.log('Modal closed');
         }
     };
-
-
-    const handleDeleteProduct = async () => {
-        try {
-            await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });
-            setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
-            handleCloseEditModal();
-        } catch (error) {
-            alert('Error deleting product!', error);
-        }
-    };
-
-    const handleEditChange = (e) => {
-        const { name, value } = e.target;
-        setSelectedProduct((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleUpdateProduct = async () => {
-        try {
-            const { _id, productName, productDescription, productPrice } = selectedProduct;
-
-            if (!_id || !productName || !productDescription || !productPrice) {
-                return alert('Fields must not be empty!');
-            }
-            const data = {
-                productId: _id,
-                productName,
-                productPrice,
-                productDescription
-            };
-            const response = await axios.post('https://server-two-blue.vercel.app/editproduct', data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (response.data.success) {
-                handleCloseEditModal();
-                fetchMenu();
-            } else {
-                alert(response.data.message);
-            }
-        } catch (error) {
-            console.error('Error updating product:', error);
-            alert('Error updating product!');
-        }
-    };
+    
 
     const fetchMenu = async () => {
         const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
