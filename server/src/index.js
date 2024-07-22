@@ -19,7 +19,7 @@ const Products = require('../models/productModel.js');
 cloudinary.config({ 
   cloud_name: 'dnw3vru0m', 
         api_key: '866971629383898', 
-        api_secret: '<Gwq7Oje7yx1d0RRGN09iWon19qg>' 
+        api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg' 
 });
 
 
