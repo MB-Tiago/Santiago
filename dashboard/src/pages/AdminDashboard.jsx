@@ -30,13 +30,13 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-              const response = await axios.get('https://server-two-blue.vercel.app/getproducts');
-              console.log('Fetched products:', response.data);
-              setMenuItems(response.data);
+                const response = await axios.get('https://server-two-blue.vercel.app/getproducts');
+                console.log('Fetched products:', JSON.stringify(response.data, null, 2));
+                setMenuItems(response.data);
             } catch (error) {
-              console.error('Error fetching menu:', error);
+                console.error('Error fetching menu:', error);
             }
-          };
+        };
     }, []);
 
     const handleOpenAddModal = () => {
@@ -72,20 +72,15 @@ const AdminDashboard = () => {
 
     const handleOnChange = (e) => {
         const { name, value, files } = e.target;
-        if (name === 'productImage' && files && files[0]) {
+        if (name === 'productImage') {
             const file = files[0];
-            const imageUrl = URL.createObjectURL(file);
-
-            setProducts((prev) => ({
+            setProducts(prev => ({
                 ...prev,
-                productImage: file,
-                productImageUrl: imageUrl
+                [name]: file,
+                productImageUrl: URL.createObjectURL(file)
             }));
         } else {
-            setProducts((prev) => ({
-                ...prev,
-                [name]: value
-            }));
+            setProducts(prev => ({ ...prev, [name]: value }));
         }
     };
 
@@ -105,23 +100,23 @@ const AdminDashboard = () => {
         try {
             console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
-    
+
             if (!productName || !productPrice || !productDescription || !productImage) {
                 console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
-    
+
             if (!(productImage instanceof File)) {
                 console.error('Invalid image file');
                 return alert('Please select a valid image file');
             }
-    
+
             console.log('Image details:', productImage.name, productImage.type, productImage.size);
-    
+
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
             cloudinaryData.append('upload_preset', 'dqh9de7m');
-    
+
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
                 `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
@@ -132,17 +127,17 @@ const AdminDashboard = () => {
                     }
                 }
             );
-    
+
             console.log('Cloudinary response received:', cloudinaryResponse.data);
             const imageUrl = cloudinaryResponse.data.secure_url;
-    
+
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
                 imageUrl
             };
-    
+
             console.log('Sending product data to server:', productData);
             const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
                 headers: {
@@ -151,18 +146,18 @@ const AdminDashboard = () => {
             });
             console.log('Full product data:', addProductResponse.data.data);
             // console.log('Server response:', addProductResponse.data);
-    
+
             setProducts({
                 productName: '',
                 productPrice: '',
                 productDescription: '',
                 productImage: null
             });
-    
+
             console.log('Product state reset');
             fetchMenu();
             console.log('Menu refreshed');
-    
+
             alert('Product added successfully!');
         } catch (error) {
             console.error('Error adding product:', error);
@@ -181,9 +176,9 @@ const AdminDashboard = () => {
             console.log('Modal closed');
         }
     };
-    
-    
-    
+
+
+
 
 
     const handleDeleteProduct = async () => {
@@ -234,10 +229,10 @@ const AdminDashboard = () => {
         }
     };
 
-    const fetchMenu = async () => {
-        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
-        setValues(menu?.data?.data);
-    };
+    // const fetchMenu = async () => {
+    //     const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
+    //     setValues(menu?.data?.data);
+    // };
 
     const filteredProducts = values.filter((product) =>
         product[searchBy].toLowerCase().includes(searchTerm.toLowerCase())
@@ -279,7 +274,7 @@ const AdminDashboard = () => {
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (
-                                <img src={products.productImageUrl} alt="Product" />
+                                <img src={products.productImageUrl} alt="Product Preview" />
                             ) : (
                                 <h1>No image</h1>
                             )}

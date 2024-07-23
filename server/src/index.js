@@ -252,7 +252,7 @@ app.post('/addproduct', async (req, res) => {
     });
 
     const savedProduct = await newProduct.save();
-    console.log('Saved product:', savedProduct);
+    console.log('Saved product:', JSON.stringify(savedProduct, null, 2));
     // console.log('Saved product:', savedProduct);
 
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
