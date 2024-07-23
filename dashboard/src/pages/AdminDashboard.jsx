@@ -116,7 +116,7 @@ const AdminDashboard = () => {
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                `https://api.cloudinary.com/v1_1/dnw3vru0m`,
                 cloudinaryData,
                 {
                     headers: {
