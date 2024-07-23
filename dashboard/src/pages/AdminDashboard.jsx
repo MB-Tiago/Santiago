@@ -12,7 +12,7 @@ const AdminDashboard = () => {
         productPrice: '',
         productDescription: '',
         productImage: null,
-        // productImageUrl: ''
+        productImageUrl: ''
     });
     const [selectedProduct, setSelectedProduct] = useState({
         _id: '',
@@ -147,7 +147,7 @@ const AdminDashboard = () => {
                 productName: '',
                 productPrice: '',
                 productDescription: '',
-                // productImageUrl: '',
+                productImageUrl: '',
                 productImage: null
             });
     
