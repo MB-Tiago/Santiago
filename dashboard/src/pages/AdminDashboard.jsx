@@ -101,13 +101,17 @@ const AdminDashboard = () => {
         console.log(modalType)
     }
 
-    const handleDeleteProduct = async () => {
+    const handleDeleteProduct = async (e) => {
         try {
-            await axios.post(`${VITE_HOST}/deleteproduct`, { productId: selectedProduct._id });
-            setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
-            handleCloseEditModal();
+            e.preventDefault()
+            const res = await axios.post(`${VITE_HOST}/deleteproduct`, { productId: details?.productId });
+            if (res?.data?.success) return alert(res?.data?.message)
+            return alert(res?.data?.mesage)
         } catch (error) {
             alert('Error deleting product!', error);
+        } finally {
+            setModalType('');
+            fetchProducts()
         }
     };
 
@@ -259,6 +263,12 @@ const AdminDashboard = () => {
                             <Button type='submit' variant="contained">
                                 {modalType === 'AddItem' ? 'ADD ITEM' : 'UPDATE'}
                             </Button>
+                            {
+                                modalType === 'EditItem' &&
+                                <Button onClick={handleDeleteProduct} variant="contained">
+                                    Delete
+                                </Button>
+                            }
                             <Button type='button' variant="contained" onClick={handleModalClose}>
                                 Cancel
                             </Button>
