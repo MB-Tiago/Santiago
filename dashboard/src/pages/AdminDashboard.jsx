@@ -12,7 +12,7 @@ const AdminDashboard = () => {
         productPrice: '',
         productDescription: '',
         productImage: null,
-        productImageUrl: ''
+        // productImageUrl: ''
     });
     const [selectedProduct, setSelectedProduct] = useState({
         _id: '',
@@ -147,7 +147,7 @@ const AdminDashboard = () => {
                 productName: '',
                 productPrice: '',
                 productDescription: '',
-                productImageUrl: '',
+                // productImageUrl: '',
                 productImage: null
             });
     
@@ -269,8 +269,8 @@ const AdminDashboard = () => {
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.productImageUrl ? (
-                                <img src={products.productImageUrl} alt="Product" />
+                            {products.productImage ? (
+                                <img src={products.productImage} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
