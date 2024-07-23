@@ -236,17 +236,29 @@ app.post('/adduser', upload.single('image'), async (req, res) => {
   }
 });
 
-app.post('/addproduct', async (req, res) => {
+app.post('/addproduct', upload.single('image'), async (req, res) => {
   try {
-    const { productName, productDescription, productPrice, imageUrl } = req.body;
+    const { productName, productDescription, productPrice } = req.body;
     const productId = Math.floor(Math.random() * 100000);
+
+    // Upload image to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "products" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl // Use the Cloudinary URL sent from the frontend
+      image: result.secure_url // Use the Cloudinary URL
     });
 
     const savedProduct = await newProduct.save();
@@ -258,7 +270,6 @@ app.post('/addproduct', async (req, res) => {
     res.status(500).json({ success: false, message: `Product failed to add: ${error.message}` });
   }
 });
-
 
 app.get('/getallproducts', async (req, res) => {
   try {
