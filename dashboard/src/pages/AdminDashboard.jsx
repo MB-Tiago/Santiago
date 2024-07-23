@@ -207,46 +207,22 @@ const AdminDashboard = () => {
 
     const handleUpdateProduct = async () => {
         try {
-            const { _id, productName, productDescription, productPrice, productImage } = selectedProduct;
-    
+            const { _id, productName, productDescription, productPrice } = selectedProduct;
+
             if (!_id || !productName || !productDescription || !productPrice) {
                 return alert('Fields must not be empty!');
             }
-    
-            let imageUrl = selectedProduct.image; 
-    
-            if (productImage instanceof File) {
-                const cloudinaryData = new FormData();
-                cloudinaryData.append('file', productImage);
-                cloudinaryData.append('upload_preset', 'dqh9de7m');
-    
-                const cloudinaryResponse = await axios.post(
-                    `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
-                    cloudinaryData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }
-                );
-    
-                imageUrl = cloudinaryResponse.data.secure_url;
-            }
-    
             const data = {
                 productId: _id,
                 productName,
                 productPrice,
-                productDescription,
-                imageUrl
+                productDescription
             };
-    
             const response = await axios.post('https://server-two-blue.vercel.app/editproduct', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-    
             if (response.data.success) {
                 handleCloseEditModal();
                 fetchMenu();
@@ -298,67 +274,54 @@ const AdminDashboard = () => {
                 </Button>
             </div>
 
-            <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
-    <div className="view-modal">
-        <h1>Edit</h1>
-        {selectedProduct && (
-            <div className="modal-forms">
-                <div className="image-container">
-                    {selectedProduct.productImageUrl ? (
-                        <img src={selectedProduct.productImageUrl} alt="Product" />
-                    ) : selectedProduct.image ? (
-                        <img
-                            src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
-                            alt="Product"
+            <Modal open={modalAddOpen} onClose={handleCloseAddModal}>
+                <div className="view-modal">
+                    <h1>Add Item</h1>
+                    <div className="modal-forms">
+                        <div className="image-container">
+                            {products.productImageUrl ? (
+                                <img src={products.productImageUrl} alt="Product" />
+                            ) : (
+                                <h1>No image</h1>
+                            )}
+                        </div>
+                        <TextField
+                            name="productName"
+                            label="Name"
+                            value={products.productName}
+                            onChange={handleOnChange}
                         />
-                    ) : (
-                        <h1>No image</h1>
-                    )}
+                        <TextField
+                            name="productDescription"
+                            label="Description"
+                            value={products.productDescription}
+                            onChange={handleOnChange}
+                        />
+                        <TextField
+                            name="productPrice"
+                            label="Price"
+                            type="number"
+                            value={products.productPrice}
+                            onChange={handleOnChange}
+                        />
+                        <input
+                            name="productImage"
+                            type="file"
+                            accept="image/*"
+                           
+                            onChange={handleOnChange}
+                        />
+                        <div className="btn-add">
+                            <Button variant="contained" onClick={handleAddProduct}>
+                                Add
+                            </Button>
+                            <Button variant="contained" onClick={handleCancel}>
+                                Cancel
+                            </Button>
+                        </div>
+                    </div>
                 </div>
-                <TextField
-                    name="productName"
-                    label="Product Name"
-                    value={selectedProduct.productName}
-                    onChange={handleEditChange}
-                />
-                <TextField
-                    name="productDescription"
-                    label="Product Description"
-                    value={selectedProduct.productDescription}
-                    onChange={handleEditChange}
-                />
-                <TextField
-                    name="productPrice"
-                    type="number"
-                    label="Product Price"
-                    value={selectedProduct.productPrice}
-                    onChange={handleEditChange}
-                />
-                <input
-                    name="productImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleEditChange}
-                />
-                <div className="btn-add">
-                    <Button variant="contained" onClick={handleUpdateProduct}>
-                        Save Changes
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={handleDeleteProduct}
-                        startIcon={<DeleteIcon />}
-                    >
-                        Delete
-                    </Button>
-                    <Button variant="contained" onClick={handleCloseEditModal}>
-                        Cancel
-                    </Button>
-                </div>
-            </div>
-        )}
-    </div>
-</Modal>
+            </Modal>
 
             <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
                 <div className="view-modal">
