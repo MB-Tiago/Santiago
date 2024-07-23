@@ -241,20 +241,23 @@ app.post('/addproduct', async (req, res) => {
     const { productName, productDescription, productPrice, imageUrl } = req.body;
     const productId = Math.floor(Math.random() * 100000);
 
+    console.log('Received product data:', { productName, productDescription, productPrice, imageUrl });
+
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl // Use the Cloudinary URL sent from the frontend
+      image: imageUrl // Use the Cloudinary URL
     });
 
     const savedProduct = await newProduct.save();
 
-    console.log('From server: ', savedProduct);
+    console.log('Saved product:', savedProduct);
 
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
   } catch (error) {
+    console.error('Error adding product:', error);
     res.status(500).json({ success: false, message: `Product failed to add: ${error.message}` });
   }
 });

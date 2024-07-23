@@ -112,7 +112,7 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m'); // Make sure this is correct
+            cloudinaryData.append('upload_preset', 'dqh9de7m');
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
                 productName,
                 productPrice,
                 productDescription,
-                imageUrl // Send the Cloudinary URL to the server
+                imageUrl
             };
     
             console.log('Sending product data to server:', productData);
