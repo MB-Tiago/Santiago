@@ -239,6 +239,8 @@ const AdminDashboard = () => {
     const fetchMenu = async () => {
         const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
         setValues(menu?.data?.data);
+
+        console.log(values)
     };
 
     const filteredProducts = values.filter((product) =>
