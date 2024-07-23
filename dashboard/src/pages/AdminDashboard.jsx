@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Modal, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import './AdminDashboard.css';
-import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import SidebarAdmin from './SidebarAdmin';
-import DisplayImage from './DisplayImage';
 const { VITE_HOST } = import.meta.env
 
 const AdminDashboard = () => {
     const [values, setValues] = useState([])
     const [modalType, setModalType] = useState('')
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState('');
+    const [searchBy, setSearchBy] = useState('name');
     const [details, setDetails] = useState({
         productId: '',
         productName: '',
@@ -182,6 +181,14 @@ const AdminDashboard = () => {
         }
     }
 
+    const handleSearchByChange = (e) => {
+        setSearchBy(e.target.value);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+    };
+
     return (
         <div className="admin-dashboard-container">
             <SidebarAdmin />
@@ -191,15 +198,15 @@ const AdminDashboard = () => {
                     label="Search"
                     variant="outlined"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={handleSearchChange}
                 />
                 <FormControl variant="outlined">
                     <InputLabel id="search-by-label">Search By</InputLabel>
                     <Select
                         labelId="search-by-label"
                         id="search-by"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchBy}
+                        onChange={handleSearchByChange}
                         label="Search By"
                     >
                         <MenuItem value="name">Name</MenuItem>
@@ -260,7 +267,9 @@ const AdminDashboard = () => {
                 </form>
             </Modal>
             <div className="edit-menu-container">
-                {values.map((pro) => (
+                {values.filter((pro) =>
+                    pro[searchBy]?.toLowerCase().includes(search.toLowerCase())
+                ).map((pro) => (
                     <div
                         key={pro._id}
                         className="card-edit"
