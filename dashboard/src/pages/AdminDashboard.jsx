@@ -317,8 +317,6 @@ const AdminDashboard = () => {
                 </div>
             </Modal>
 
-            
-
             <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
                 <div className="view-modal">
                     <h1>Edit</h1>
