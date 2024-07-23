@@ -318,7 +318,7 @@ const AdminDashboard = () => {
             </Modal>
 
             <div className="product-list">
-                {products.map((item) => {
+                {menuItems.map((item) => {
                     console.log('Rendering product:', item);
                     return (
                         <div key={item._id} className="product-item">
