@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import SidebarAdmin from './SidebarAdmin';
 import './ManageUser.css';
+const { VITE_HOST } = import.meta.env
 
 function ManageUser() {
   const [users, setUsers] = useState([]);
@@ -26,7 +27,7 @@ function ManageUser() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://server-two-blue.vercel.app/api/users');
+      const response = await axios.get(`${VITE_HOST}/api/users`);
       console.log('API Response:', response.data); // Debug: Log API response
       setUsers(response.data);
     } catch (error) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';'@emotion/react';
 import './Navbar.css'
+const { VITE_HOST } = import.meta.env
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

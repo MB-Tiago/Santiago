@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import SidebarAdmin from './SidebarAdmin';
 import DisplayImage from './DisplayImage';
+const { VITE_HOST } = import.meta.env
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState({
@@ -137,7 +138,7 @@ const AdminDashboard = () => {
             };
     
             console.log('Sending product data to server:', productData);
-            const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
+            const addProductResponse = await axios.post(`${VITE_HOST}/addproduct`, productData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -180,7 +181,7 @@ const AdminDashboard = () => {
 
     const handleDeleteProduct = async () => {
         try {
-            await axios.post('https://server-two-blue.vercel.app/deleteproduct', { productId: selectedProduct._id });
+            await axios.post(`${VITE_HOST}/deleteproduct`, { productId: selectedProduct._id });
             setValues((prev) => prev.filter((product) => product._id !== selectedProduct._id));
             handleCloseEditModal();
         } catch (error) {
@@ -219,7 +220,7 @@ const AdminDashboard = () => {
                 productPrice,
                 productDescription
             };
-            const response = await axios.post('https://server-two-blue.vercel.app/editproduct', data, {
+            const response = await axios.post(`${VITE_HOST}/editproduct`, data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -237,7 +238,7 @@ const AdminDashboard = () => {
     };
 
     const fetchMenu = async () => {
-        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
+        const menu = await axios.get(`${VITE_HOST}/getallproducts`);
         setValues(menu?.data?.data);
 
         console.log(values)
@@ -394,7 +395,7 @@ const AdminDashboard = () => {
                     >
                         <div className="image-container">
                             <img
-                                src={`https://server-two-blue.vercel.app/uploads/${pro.image}`}
+                                src={`${VITE_HOST}/uploads/${pro.image}`}
                                 alt="Product"
                             />
                         </div>

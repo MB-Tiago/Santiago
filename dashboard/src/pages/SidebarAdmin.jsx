@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+const { VITE_HOST } = import.meta.env
 
 
 function SidebarAdmin() {

@@ -6,6 +6,7 @@ import Billing from './Billing';
 import { useNavigate } from 'react-router-dom';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import SalesReport from './SalesReport';
+const { VITE_HOST } = import.meta.env
 
 const TiagoShop = () => {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ const TiagoShop = () => {
         try {
             const routingNumber = "000000001"
 
-            const response = await axios.get('https://server-two-blue.vercel.app/getallproducts');
+            const response = await axios.get(`${VITE_HOST}/getallproducts`);
             setProducts(response.data.data);
             setValues((prev) => ({
                 ...prev,

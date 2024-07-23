@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, TextField, RadioGroup, FormControlLabel, Radio, Modal, Backdrop, Fade, Paper, Typography } from '@mui/material';
 import './Billing.css';
+const { VITE_HOST } = import.meta.env
 
 const Billing = ({ cart, transactionMode, billingDetails, handleTransactionModeChange, handleBillingChange, handleBillingSubmit }) => {
     const getTotalPrice = () => {

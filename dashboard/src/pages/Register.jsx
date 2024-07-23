@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './Register.css';
 import axios from 'axios';
+const { VITE_HOST } = import.meta.env
 
 function Register({ open, onClose }) {
   const [registerID, setRegisterID] = useState('');
@@ -26,7 +27,7 @@ function Register({ open, onClose }) {
       return;
     }
     try {
-      const response = await axios.post('https://server-two-blue.vercel.app/register', {
+      const response = await axios.post(`${VITE_HOST}/register`, {
         registerID,
         registerPassword,
         bankAccount,

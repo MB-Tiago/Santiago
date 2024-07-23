@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './Menu.css'
 import axios from 'axios'
 import Navbar from './Navbar'
+const { VITE_HOST } = import.meta.env
 
 function Menu() {
     const [values, setValues] = useState([])
@@ -11,7 +12,7 @@ function Menu() {
     }, [])
 
     const fetchMenu = async () => {
-        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts')
+        const menu = await axios.get(`${VITE_HOST}/getallproducts`)
         setValues(menu?.data?.data)
     }
     return (
@@ -24,7 +25,7 @@ function Menu() {
                     values?.map((pro) => (
                         <div key={pro?._id} className="card">
                             <div className="image-container">
-                                <img src={`https://server-two-blue.vercel.app/uploads/${pro?.image}`} alt='' />
+                                <img src={`${VITE_HOST}/uploads/${pro?.image}`} alt='' />
                             </div>
                             <div className='label'>
                             <h3>{pro?.name}</h3>

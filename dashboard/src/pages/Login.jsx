@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import Register from './Register';
 import './Login.css';
+const { VITE_HOST } = import.meta.env
 
 function Login() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -17,7 +18,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://server-two-blue.vercel.app/login', { loginID, password });
+      const response = await axios.post(`${VITE_HOST}/login`, { loginID, password });
       const { token, role, redirectUrl } = response.data;
 
       localStorage.setItem('token', token);

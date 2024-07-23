@@ -1,6 +1,7 @@
 import React from 'react';
 import './Dashboard.css';
 import SidebarAdmin from './SidebarAdmin';
+const { VITE_HOST } = import.meta.env
 
 function Dashboard() {
     return (

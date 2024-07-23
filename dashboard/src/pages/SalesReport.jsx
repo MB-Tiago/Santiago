@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './SalesReport.css';
 import AnalystDashboard from './AnalystSidebar';
+const { VITE_HOST } = import.meta.env
 
 const SalesReport = () => {
     const [sales, setSales] = useState([]);
@@ -15,7 +16,7 @@ const SalesReport = () => {
 
     const fetchSales = async () => {
         try {
-            const response = await axios.get('https://server-two-blue.vercel.app/api/getSales');
+            const response = await axios.get(`${VITE_HOST}/api/getSales`);
             const reversedSales = response.data.data.reverse();
             setSales(reversedSales);
             aggregateSales(reversedSales);

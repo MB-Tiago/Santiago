@@ -10,7 +10,7 @@ const Sales = require('../models/Sales.js');
 const cloudinary = require('cloudinary').v2;
 
 const PORT = process.envPORT || 3004;
-const HOST = '192.168.10.13'
+const HOST = 'localhost'
 
 const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');

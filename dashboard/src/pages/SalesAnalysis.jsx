@@ -13,6 +13,7 @@ import {
     Legend,
 } from 'chart.js';
 import AnalystDashboard from './AnalystSidebar';
+const { VITE_HOST } = import.meta.env
 
 ChartJS.register(
     CategoryScale,
@@ -32,7 +33,7 @@ const SalesAnalysis = () => {
 
     const fetchSales = async () => {
         try {
-            const response = await axios.get('https://server-two-blue.vercel.app/api/getSales');
+            const response = await axios.get(`${VITE_HOST}/api/getSales`);
             const reversedSales = response.data.data.reverse();
             countProducts(reversedSales);
         } catch (error) {

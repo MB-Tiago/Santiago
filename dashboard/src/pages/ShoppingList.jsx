@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import './ShoppingList.css';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+const { VITE_HOST } = import.meta.env
 
 const items = [
   { url: "http://192.168.10.12/YACAPIN", img: "WNE.png", caption: "Watch and Earn" },

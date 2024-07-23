@@ -6,6 +6,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import './AnalystSidebar.css';
+const { VITE_HOST } = import.meta.env
 
 function AnalystSidebar() {
 
