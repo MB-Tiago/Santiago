@@ -8,176 +8,95 @@ import DisplayImage from './DisplayImage';
 const { VITE_HOST } = import.meta.env
 
 const AdminDashboard = () => {
-    const [products, setProducts] = useState({
+    const [values, setValues] = useState([])
+    const [modalType, setModalType] = useState('')
+    const [search, setSearch] = useState('')
+    const [details, setDetails] = useState({
         productName: '',
-        productPrice: '',
         productDescription: '',
-        productImage: null,
-        productImageUrl: ''
-    });
-    const [selectedProduct, setSelectedProduct] = useState({
-        _id: '',
-        productName: '',
-        productPrice: '',
-        productDescription: '',
-        image: null
-    });
-    const [modalAddOpen, setModalAddOpen] = useState(false);
-    const [modalEditOpen, setModalEditOpen] = useState(false);
-    const [values, setValues] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchBy, setSearchBy] = useState('name'); // Default search by name
+        price: '',
+        image: ''
+    })
 
     useEffect(() => {
-        fetchMenu();
-    }, []);
+        fetchProducts()
+    }, [])
 
-    const handleOpenAddModal = () => {
-        setModalAddOpen(true);
-    };
-
-    const handleCloseAddModal = () => {
-        setModalAddOpen(false);
-    };
-
-    const handleOpenEditModal = (product) => {
-        setSelectedProduct({
-            _id: product?._id,
-            productName: product?.name,
-            productDescription: product?.description,
-            productPrice: product?.price,
-            image: product?.image,
-            imageUrl: product?.imageUrl
-        });
-        setModalEditOpen(true);
-        console.log(product);
-    };
-
-    const handleCloseEditModal = () => {
-        setModalEditOpen(false);
-        setSelectedProduct({
-            _id: '',
-            productName: '',
-            productDescription: '',
-            productPrice: '',
-            image: null
-        });
-    };
-
-    const handleOnChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === 'productImage' && files && files[0]) {
-            const file = files[0];
-            const imageUrl = URL.createObjectURL(file);
-
-            setProducts((prev) => ({
-                ...prev,
-                productImage: file,
-                productImageUrl: imageUrl
-            }));
-        } else {
-            setProducts((prev) => ({
-                ...prev,
-                [name]: value
-            }));
+    const fetchProducts = async () => {
+        try {
+            const res = await axios.get(`${VITE_HOST}/getallproducts`)
+            setValues(res?.data?.data)
+        } catch (error) {
+            console.error(error)
         }
-    };
-
-    const handleCancel = () => {
-        setModalAddOpen(false);
-        setProducts({
-            productName: '',
-            productPrice: '',
-            productDescription: '',
-            productImageUrl: '',
-            productImage: null
-        });
-    };
-
+    }
 
     const handleAddProduct = async () => {
         try {
-            console.log('Starting product addition process');
-            const { productName, productPrice, productDescription, productImage } = products;
-    
-            if (!productName || !productPrice || !productDescription || !productImage) {
-                console.log('Missing required fields');
-                return alert('Fields must not be empty!');
-            }
-    
-            if (!(productImage instanceof File)) {
-                console.error('Invalid image file');
-                return alert('Please select a valid image file');
-            }
-    
-            console.log('Image details:', productImage.name, productImage.type, productImage.size);
-    
-            const cloudinaryData = new FormData();
-            cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m');
-    
-            console.log('Sending request to Cloudinary');
-            const cloudinaryResponse = await axios.post(
+            const cloudinary = new FormData();
+            cloudinary.append('file', details?.image);
+            cloudinary.append('upload_preset', 'dqh9de7m');
+
+            const res = await axios.post(
                 `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
-                cloudinaryData,
+                cloudinary,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 }
             );
-    
-            console.log('Cloudinary response received:', cloudinaryResponse.data);
-            const imageUrl = cloudinaryResponse.data.secure_url;
-    
-            const productData = {
-                productName,
-                productPrice,
-                productDescription,
-                imageUrl
-            };
-    
-            console.log('Sending product data to server:', productData);
-            const addProductResponse = await axios.post(`${VITE_HOST}/addproduct`, productData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            console.log('Server response:', addProductResponse.data);
-    
-            setProducts({
-                productName: '',
-                productPrice: '',
-                productDescription: '',
-                productImage: null
-            });
-    
-            console.log('Product state reset');
-            fetchMenu();
-            console.log('Menu refreshed');
-    
-            alert('Product added successfully!');
+
+            const url = res?.data?.secure_url
+
+            const AddToDatabase = await axios.post(`${VITE_HOST}/addproduct`, {
+                productName: details?.productName,
+                productDescription: details?.productDescription,
+                price: details?.price,
+                image: url
+            })
+
+            if (AddToDatabase?.data?.success) return alert(AddToDatabase?.data?.message)
+            return alert(AddToDatabase?.data?.message)
+
         } catch (error) {
             console.error('Error adding product:', error);
-            if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
-            }
-            alert('Error adding product: ' + (error.response?.data?.message || error.message));
         } finally {
-            setModalAddOpen(false);
-            console.log('Modal closed');
+            setModalType('');
+            setDetails((prev) => ({
+                ...prev,
+                productName: '',
+                productDescription: '',
+                price: '',
+                image: ''
+            }))
         }
     };
-    
-    
-    
 
+    const handleOnChange = (e) => {
+        const { name, value, files } = e.target;
+        if (name === 'image' && files.length > 0) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setDetails((prev) => ({
+                    ...prev,
+                    image: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setDetails((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+    }
+
+    const handleOnClickAddItem = () => {
+        setModalType('AddItem')
+        console.log(modalType)
+    }
 
     const handleDeleteProduct = async () => {
         try {
@@ -189,64 +108,40 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleEditChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === 'productImage' && files && files[0]) {
-            const file = files[0];
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedProduct(prev => ({
-                ...prev,
-                productImage: file,
-                productImageUrl: imageUrl
-            }));
-        } else {
-            setSelectedProduct(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    };
+    const handleModalClose = () => {
+        setDetails((prev) => ({
+            ...prev,
+            productName: '',
+            productDescription: '',
+            price: '',
+            image: ''
+        }))
+        setModalType('')
+    }
 
-    const handleUpdateProduct = async () => {
-        try {
-            const { _id, productName, productDescription, productPrice } = selectedProduct;
+    // const handleUpdateProduct = async () => {
+    //     try {
+    //         const { _id, productName, productDescription, productPrice } = selectedProduct;
 
-            if (!_id || !productName || !productDescription || !productPrice) {
-                return alert('Fields must not be empty!');
-            }
-            const data = {
-                productId: _id,
-                productName,
-                productPrice,
-                productDescription
-            };
-            const response = await axios.post(`${VITE_HOST}/editproduct`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (response.data.success) {
-                handleCloseEditModal();
-                fetchMenu();
-            } else {
-                alert(response.data.message);
-            }
-        } catch (error) {
-            console.error('Error updating product:', error);
-            alert('Error updating product!');
-        }
-    };
-
-    const fetchMenu = async () => {
-        const menu = await axios.get(`${VITE_HOST}/getallproducts`);
-        setValues(menu?.data?.data);
-
-        console.log(values)
-    };
-
-    const filteredProducts = values.filter((product) =>
-        product[searchBy].toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    //         if (!_id || !productName || !productDescription || !productPrice) {
+    //             return alert('Fields must not be empty!');
+    //         }
+    //         const data = {
+    //             productId: _id,
+    //             productName,
+    //             productPrice,
+    //             productDescription
+    //         };
+    //         // const response = await axios.post(`${VITE_HOST}/editproduct`, data, {
+    //         //     headers: {
+    //         //         'Content-Type': 'application/json'
+    //         //     }
+    //         // });
+    //     } catch (error) {
+    //         console.error('Error updating product:', error);
+    //         alert('Error updating product!');
+    //     }
+    // };
 
     return (
         <div className="admin-dashboard-container">
@@ -256,16 +151,16 @@ const AdminDashboard = () => {
                     id="search"
                     label="Search"
                     variant="outlined"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                 />
                 <FormControl variant="outlined">
                     <InputLabel id="search-by-label">Search By</InputLabel>
                     <Select
                         labelId="search-by-label"
                         id="search-by"
-                        value={searchBy}
-                        onChange={(e) => setSearchBy(e.target.value)}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         label="Search By"
                     >
                         <MenuItem value="name">Name</MenuItem>
@@ -273,43 +168,41 @@ const AdminDashboard = () => {
                         <MenuItem value="description">Description</MenuItem>
                     </Select>
                 </FormControl>
-                <Button variant="contained" onClick={handleOpenAddModal}>
+                <Button variant="contained" onClick={handleOnClickAddItem}>
                     Add Item
                 </Button>
             </div>
 
-            <Modal open={modalAddOpen} onClose={handleCloseAddModal}>
+            <Modal open={modalType !== ''} onClose={handleModalClose}>
                 <div className="view-modal">
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.imageUrl ? (
-                                <img src={products.imageUrl} alt="Product" />
-                            ) : (
+                            {details?.image ? (<img src={details?.image} alt="Product" />) : (
                                 <h1>No image</h1>
                             )}
                         </div>
                         <TextField
                             name="productName"
                             label="Name"
-                            value={products.productName}
+                            value={details?.productName}
                             onChange={handleOnChange}
                         />
                         <TextField
                             name="productDescription"
                             label="Description"
-                            value={products.productDescription}
+                            value={details?.productDescription}
                             onChange={handleOnChange}
                         />
                         <TextField
-                            name="productPrice"
+                            name="price"
                             label="Price"
                             type="number"
-                            value={products.productPrice}
+                            value={details?.price}
                             onChange={handleOnChange}
                         />
                         <input
-                            name="productImage"
+                            name="image"
                             type="file"
                             accept="image/*"
                             onChange={handleOnChange}
@@ -318,7 +211,7 @@ const AdminDashboard = () => {
                             <Button variant="contained" onClick={handleAddProduct}>
                                 Add
                             </Button>
-                            <Button variant="contained" onClick={handleCancel}>
+                            <Button variant="contained" onClick={handleModalClose}>
                                 Cancel
                             </Button>
                         </div>
@@ -326,7 +219,7 @@ const AdminDashboard = () => {
                 </div>
             </Modal>
 
-            <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
+            {/* <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
                 <div className="view-modal">
                     <h1>Edit</h1>
                     {selectedProduct && (
@@ -384,10 +277,10 @@ const AdminDashboard = () => {
                         </div>
                     )}
                 </div>
-            </Modal>
+            </Modal> */}
 
-            <div className="edit-menu-container">
-                {filteredProducts.map((pro) => (
+            {/* <div className="edit-menu-container">
+                {values.map((pro) => (
                     <div
                         key={pro._id}
                         className="card-edit"
@@ -406,7 +299,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };
