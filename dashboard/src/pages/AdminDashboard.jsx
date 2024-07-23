@@ -298,7 +298,7 @@ const AdminDashboard = () => {
                             name="productImage"
                             type="file"
                             accept="image/*"
-                            value={products.image}
+                            value={products.productImage}
                             onChange={handleOnChange}
                         />
                         <div className="btn-add">
