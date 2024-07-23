@@ -282,8 +282,8 @@ const AdminDashboard = () => {
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.image ? (
-                                <img src={products.image} alt="Product" />
+                            {products.imageUrl ? (
+                                <img src={products.imageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
