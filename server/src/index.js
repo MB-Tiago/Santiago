@@ -282,15 +282,18 @@ app.post('/deleteproduct', async (req, res) => {
 
 app.post('/editproduct', async (req, res) => {
   try {
-    const { productId, productName, productDescription, productPrice } = req.body;
+    const { productId, productName, productDescription, productPrice, image } = req.body;
 
     console.log('Received data for updating product:', productId, productName, productDescription, productPrice);
 
-    const updatedProduct = await Products.findByIdAndUpdate(productId, {
-      name: productName,
-      description: productDescription,
-      price: productPrice
-    }, { new: true });
+    const updatedProduct = await Products.findByIdAndUpdate(
+      productId,
+      {
+        name: productName,
+        description: productDescription,
+        price: productPrice,
+        imageUrl: image
+      }, { new: true });
 
     if (updatedProduct) {
       res.json({ success: true, message: 'Product updated successfully!', data: updatedProduct });
