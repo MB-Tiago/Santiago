@@ -45,6 +45,7 @@ const AdminDashboard = () => {
             productName: product?.name,
             productDescription: product?.description,
             productPrice: product?.price,
+            image: product?.image,
             imageUrl: product?.imageUrl
         });
         setModalEditOpen(true);
