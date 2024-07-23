@@ -8,18 +8,16 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const Sales = require('../models/Sales.js');
 const cloudinary = require('cloudinary').v2;
-
-const PORT = process.envPORT || 3004;
-const HOST = 'localhost'
+require('dotenv').config()
 
 const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
 
-cloudinary.config({ 
-  cloud_name: 'dnw3vru0m', 
-        api_key: '866971629383898', 
-        api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg' 
+cloudinary.config({
+  cloud_name: 'dnw3vru0m',
+  api_key: '866971629383898',
+  api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg'
 });
 
 
@@ -50,7 +48,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const ConnectToDatabase = async () => {
   try {
-    await mongoose.connect("mongodb+srv://melbraei:melbraei@freecluster.qmvdcxw.mongodb.net/TiagoShop")
+    await mongoose.connect("mongodb://localhost:27017/tiagoshop")
     console.log('Connected to the database!')
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
@@ -58,8 +56,8 @@ const ConnectToDatabase = async () => {
   }
 }
 
-app.listen(3004, () => {
-  console.log(`Listening: 3004`);
+app.listen(process.env.SERVER_PORT, process.env.HOST, () => {
+  console.log(`Listening: ${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`);
 })
 
 app.get('/', (req, res) => {
@@ -236,32 +234,26 @@ app.post('/adduser', upload.single('image'), async (req, res) => {
   }
 });
 
+
+
+////////////////////////////////////////////////////
 app.post('/addproduct', async (req, res) => {
   try {
-    const { productName, productDescription, productPrice, imageUrl } = req.body;
+    const { productName, productDescription, price, image } = req.body;
     const productId = Math.floor(Math.random() * 100000);
 
-    console.log('Received product data:', { productName, productDescription, productPrice, imageUrl });
+    const data = await Products.create({ productId, name: productName, description: productDescription, price, imageUrl: image })
 
-    const newProduct = new Products({
-      productId: productId,
-      name: productName,
-      description: productDescription,
-      price: productPrice,
-      image: imageUrl,  
-      imageUrl: imageUrl 
-    });
-
-    const savedProduct = await newProduct.save();
-
-    console.log('Saved product:', savedProduct);
-
-    res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
+    res.json({ success: true, message: 'Product added successfully!', data });
   } catch (error) {
     console.error('Error adding product:', error);
     res.status(500).json({ success: false, message: `Product failed to add: ${error.message}` });
   }
 });
+////////////////////////////////////////////////////
+
+
+
 
 app.get('/getallproducts', async (req, res) => {
   try {
