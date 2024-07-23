@@ -317,7 +317,7 @@ const AdminDashboard = () => {
                 </div>
             </Modal>
 
-            <div className="product-list">
+            {/* <div className="product-list">
                 {menuItems.map((item) => {
                     console.log('Rendering product:', item);
                     return (
@@ -333,7 +333,7 @@ const AdminDashboard = () => {
                         </div>
                     );
                 })}
-            </div>
+            </div> */}
         
             
         
