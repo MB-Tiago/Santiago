@@ -166,7 +166,7 @@ const TiagoShop = () => {
                         {products.map((product) => (
                             <div key={product._id} className="card-edit">
                                 <div className="image-container">
-                                    <img src={product?.imageUrl} alt={product.name} />
+                                    <img src={`https://server-two-blue.vercel.app/uploads/${product.image}`} alt={product.name} />
 
                                 </div>
                                 <div className="product-info">
