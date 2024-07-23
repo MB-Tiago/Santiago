@@ -238,18 +238,17 @@ app.post('/adduser', upload.single('image'), async (req, res) => {
 
 app.post('/addproduct', async (req, res) => {
   try {
-    const { productName, productDescription, productPrice, productImage } = req.body;
+    const { productName, productDescription, productPrice, imageUrl } = req.body;
     const productId = Math.floor(Math.random() * 100000);
 
-    console.log('Received product data:', { productName, productDescription, productPrice, image });
+    console.log('Received product data:', { productName, productDescription, productPrice, imageUrl });
 
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: productImage
-     
+      image: imageUrl 
     });
 
     const savedProduct = await newProduct.save();
