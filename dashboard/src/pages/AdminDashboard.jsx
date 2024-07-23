@@ -66,12 +66,12 @@ const AdminDashboard = () => {
         const { name, value, files } = e.target;
         if (name === 'productImage' && files && files[0]) {
             const file = files[0];
-            const imageUrl = URL.createObjectURL(file);
+            const image = URL.createObjectURL(file);
 
             setProducts((prev) => ({
                 ...prev,
                 productImage: file,
-                productImageUrl: imageUrl
+                productImage: image
             }));
         } else {
             setProducts((prev) => ({
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
             productName: '',
             productPrice: '',
             productDescription: '',
-            productImageUrl: '',
+            productImage: '',
             productImage: null
         });
     };
@@ -112,7 +112,7 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m'); // Adjust as necessary
+            cloudinaryData.append('upload_preset', 'dqh9de7m'); 
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
@@ -126,13 +126,13 @@ const AdminDashboard = () => {
             );
     
             console.log('Cloudinary response received:', cloudinaryResponse.data);
-            const imageUrl = cloudinaryResponse.data.secure_url;
+            const image = cloudinaryResponse.data.secure_url;
     
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
-                imageUrl
+                image
             };
     
             console.log('Sending product data to server:', productData);
