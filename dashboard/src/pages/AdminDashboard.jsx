@@ -229,10 +229,10 @@ const AdminDashboard = () => {
         }
     };
 
-    // const fetchMenu = async () => {
-    //     const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
-    //     setValues(menu?.data?.data);
-    // };
+    const fetchMenu = async () => {
+        const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
+        setValues(menu?.data?.data);
+    };
 
     const filteredProducts = values.filter((product) =>
         product[searchBy].toLowerCase().includes(searchTerm.toLowerCase())
