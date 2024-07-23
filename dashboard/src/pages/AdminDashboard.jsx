@@ -317,26 +317,7 @@ const AdminDashboard = () => {
                 </div>
             </Modal>
 
-            {/* <div className="product-list">
-                {menuItems.map((item) => {
-                    console.log('Rendering product:', item);
-                    return (
-                        <div key={item._id} className="product-item">
-                            <h3>{item.name}</h3>
-                            <p>Price: ${item.price}</p>
-                            <p>{item.description}</p>
-                            <img 
-                                src={item.image} 
-                                alt={item.name} 
-                                onError={(e) => console.error('Image failed to load:', e.target.src)}
-                            />
-                        </div>
-                    );
-                })}
-            </div> */}
-        
             
-        
 
             <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
                 <div className="view-modal">
