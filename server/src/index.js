@@ -16,10 +16,10 @@ const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
 
-cloudinary.config({
-  cloud_name: 'dnw3vru0m',
-  api_key: '866971629383898',
-  api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg'
+cloudinary.config({ 
+  cloud_name: 'dnw3vru0m', 
+        api_key: '866971629383898', 
+        api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg' 
 });
 
 
@@ -241,23 +241,20 @@ app.post('/addproduct', async (req, res) => {
     const { productName, productDescription, productPrice, imageUrl } = req.body;
     const productId = Math.floor(Math.random() * 100000);
 
-    console.log('Received product data:', { productName, productDescription, productPrice, imageUrl });
-
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl // Use the Cloudinary URL
+      image: imageUrl // Use the Cloudinary URL sent from the frontend
     });
 
     const savedProduct = await newProduct.save();
-    console.log('Saved product:', JSON.stringify(savedProduct, null, 2));
-    // console.log('Saved product:', savedProduct);
+
+    console.log('From server: ', savedProduct);
 
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });
   } catch (error) {
-    console.error('Error adding product:', error);
     res.status(500).json({ success: false, message: `Product failed to add: ${error.message}` });
   }
 });

@@ -112,7 +112,7 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m');
+            cloudinaryData.append('upload_preset', 'dqh9de7m'); // Adjust as necessary
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
@@ -141,13 +141,13 @@ const AdminDashboard = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('Full product data:', addProductResponse.data.data);
-            // console.log('Server response:', addProductResponse.data);
+            console.log('Server response:', addProductResponse.data);
     
             setProducts({
                 productName: '',
                 productPrice: '',
                 productDescription: '',
+                productImageUrl: '',
                 productImage: null
             });
     
