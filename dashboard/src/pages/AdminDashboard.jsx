@@ -280,7 +280,7 @@ const AdminDashboard = () => {
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (
-                                <img src={products.ImageUrl} alt="Product" />
+                                <img src={ImageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
