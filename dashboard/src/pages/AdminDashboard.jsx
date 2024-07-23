@@ -112,7 +112,7 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m'); // Adjust as necessary
+            cloudinaryData.append('upload_preset', 'ml_default'); // Adjust as necessary
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
