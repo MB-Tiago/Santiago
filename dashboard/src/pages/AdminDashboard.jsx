@@ -147,8 +147,7 @@ const AdminDashboard = () => {
                 productName: '',
                 productPrice: '',
                 productDescription: '',
-                productImage: null,
-                productImageUrl:""
+                productImage: null
             });
     
             console.log('Product state reset');
@@ -280,8 +279,8 @@ const AdminDashboard = () => {
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.imageUrl ? (
-                                <img src={products.imageUrl} alt="Product" />
+                            {products.productImageUrl ? (
+                                <img src={products.productImageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
