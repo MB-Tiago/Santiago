@@ -147,7 +147,8 @@ const AdminDashboard = () => {
                 productName: '',
                 productPrice: '',
                 productDescription: '',
-                productImage: null
+                productImage: null,
+                productImageUrl:""
             });
     
             console.log('Product state reset');
