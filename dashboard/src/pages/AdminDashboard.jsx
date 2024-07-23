@@ -45,7 +45,7 @@ const AdminDashboard = () => {
             productName: product?.name,
             productDescription: product?.description,
             productPrice: product?.price,
-            image: product?.image
+            imageUrl: product?.imageUrl
         });
         setModalEditOpen(true);
         console.log(product);
@@ -308,7 +308,6 @@ const AdminDashboard = () => {
                             name="productImage"
                             type="file"
                             accept="image/*"
-                           value={imageUrl}
                             onChange={handleOnChange}
                         />
                         <div className="btn-add">
