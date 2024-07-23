@@ -35,12 +35,6 @@ const AdminDashboard = () => {
         setModalAddOpen(true);
     };
 
-    const extractPublicId = (url) => {
-        const parts = url.split('/');
-        return parts[parts.length - 1].split('.')[0]; // Assuming the public ID is the last part before the file extension
-    };
-    
-
     const handleCloseAddModal = () => {
         setModalAddOpen(false);
     };
@@ -276,8 +270,7 @@ const AdminDashboard = () => {
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (
-                               <DisplayImage publicId={extractPublicId(pro.image)} />
-
+                                <img src={products.productImageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
@@ -327,8 +320,7 @@ const AdminDashboard = () => {
                             <div className="image-container">
                                 {selectedProduct.image ? (
                                     <img
-                                        src={`https://server-two-blue.vercel.app/uploads/${<DisplayImage publicId={extractPublicId(pro.image)} />
-                                    }`}
+                                        src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
                                         alt="Product"
                                     />
                                 ) : (
@@ -388,9 +380,10 @@ const AdminDashboard = () => {
                         onClick={() => handleOpenEditModal(pro)}
                     >
                         <div className="image-container">
-                        
-                        <DisplayImage publicId={extractPublicId(pro.image)} />
-                        
+                            <img
+                                src={`https://server-two-blue.vercel.app/uploads/${pro.image}`}
+                                alt="Product"
+                            />
                         </div>
                         <div className="product-info">
                             <h2>{pro.name}</h2>
