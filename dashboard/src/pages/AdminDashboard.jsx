@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     const [modalType, setModalType] = useState('')
     const [search, setSearch] = useState('')
     const [details, setDetails] = useState({
+        productId: '',
         productName: '',
         productDescription: '',
         price: '',
@@ -31,8 +32,9 @@ const AdminDashboard = () => {
         }
     }
 
-    const handleAddProduct = async () => {
+    const handleAddProduct = async (e) => {
         try {
+            e.preventDefault()
             const cloudinary = new FormData();
             cloudinary.append('file', details?.image);
             cloudinary.append('upload_preset', 'dqh9de7m');
@@ -65,11 +67,13 @@ const AdminDashboard = () => {
             setModalType('');
             setDetails((prev) => ({
                 ...prev,
+                productId: '',
                 productName: '',
                 productDescription: '',
                 price: '',
                 image: ''
             }))
+            fetchProducts()
         }
     };
 
@@ -119,29 +123,64 @@ const AdminDashboard = () => {
         setModalType('')
     }
 
-    // const handleUpdateProduct = async () => {
-    //     try {
-    //         const { _id, productName, productDescription, productPrice } = selectedProduct;
+    const handleOnClickEditMenu = (e) => {
+        setModalType('EditItem')
+        setDetails((prev) => ({
+            ...prev,
+            productId: e?._id,
+            productName: e?.name,
+            productDescription: e?.description,
+            price: e?.price,
+            image: e?.imageUrl
+        }))
+    }
 
-    //         if (!_id || !productName || !productDescription || !productPrice) {
-    //             return alert('Fields must not be empty!');
-    //         }
-    //         const data = {
-    //             productId: _id,
-    //             productName,
-    //             productPrice,
-    //             productDescription
-    //         };
-    //         // const response = await axios.post(`${VITE_HOST}/editproduct`, data, {
-    //         //     headers: {
-    //         //         'Content-Type': 'application/json'
-    //         //     }
-    //         // });
-    //     } catch (error) {
-    //         console.error('Error updating product:', error);
-    //         alert('Error updating product!');
-    //     }
-    // };
+    const handleEditSubmit = async (e) => {
+        try {
+            e.preventDefault()
+            const cloudinary = new FormData();
+            cloudinary.append('file', details?.image);
+            cloudinary.append('upload_preset', 'dqh9de7m');
+
+            const res = await axios.post(
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                cloudinary,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+
+            const url = res?.data?.secure_url
+
+            const EditProduct = await axios.post(`${VITE_HOST}/editproduct`,
+                {
+                    productId: details?.productId,
+                    productName: details?.productName,
+                    productDescription: details?.productDescription,
+                    productPrice: details?.price,
+                    image: url
+                }
+            )
+
+            if (EditProduct?.data?.success) return alert(EditProduct?.data?.message)
+            return alert(EditProduct?.data?.message)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setModalType('');
+            setDetails((prev) => ({
+                ...prev,
+                productId: '',
+                productName: '',
+                productDescription: '',
+                price: '',
+                image: ''
+            }))
+            fetchProducts()
+        }
+    }
 
     return (
         <div className="admin-dashboard-container">
@@ -174,7 +213,9 @@ const AdminDashboard = () => {
             </div>
 
             <Modal open={modalType !== ''} onClose={handleModalClose}>
-                <div className="view-modal">
+                <form
+                    onSubmit={modalType === 'AddItem' ? handleAddProduct : handleEditSubmit}
+                    className="view-modal">
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
@@ -208,87 +249,26 @@ const AdminDashboard = () => {
                             onChange={handleOnChange}
                         />
                         <div className="btn-add">
-                            <Button variant="contained" onClick={handleAddProduct}>
-                                Add
+                            <Button type='submit' variant="contained">
+                                {modalType === 'AddItem' ? 'ADD ITEM' : 'UPDATE'}
                             </Button>
-                            <Button variant="contained" onClick={handleModalClose}>
+                            <Button type='button' variant="contained" onClick={handleModalClose}>
                                 Cancel
                             </Button>
                         </div>
                     </div>
-                </div>
+                </form>
             </Modal>
-
-            {/* <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
-                <div className="view-modal">
-                    <h1>Edit</h1>
-                    {selectedProduct && (
-                        <div className="modal-forms">
-                            <div className="image-container">
-                                {selectedProduct.image ? (
-                                    <img
-                                        src={`${selectedProduct.image}`}
-                                        alt="Product"
-                                    />
-                                ) : (
-                                    <h1>No image</h1>
-                                )}
-                            </div>
-                            <TextField
-                                name="productName"
-                                label="Product Name"
-                                value={selectedProduct.productName}
-                                onChange={handleEditChange}
-                            />
-                            <TextField
-                                name="productDescription"
-                                label="Product Description"
-                                value={selectedProduct.productDescription}
-                                onChange={handleEditChange}
-                            />
-                            <TextField
-                                name="productPrice"
-                                type="number"
-                                label="Product Price"
-                                value={selectedProduct.productPrice}
-                                onChange={handleEditChange}
-                            />
-                            <div className="btn-add">
-                                <Button
-                                    variant="contained"
-                                    onClick={handleUpdateProduct}
-                                >
-                                    Save Changes
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleDeleteProduct}
-                                    startIcon={<DeleteIcon />}
-                                >
-                                    Delete
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleCloseEditModal}
-                                >
-                                    Cancel
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </Modal> */}
-
-            {/* <div className="edit-menu-container">
+            <div className="edit-menu-container">
                 {values.map((pro) => (
                     <div
                         key={pro._id}
                         className="card-edit"
-                        onClick={() => handleOpenEditModal(pro)}
+                        onClick={() => handleOnClickEditMenu(pro)}
                     >
                         <div className="image-container">
                             <img
-                                src={`${VITE_HOST}/uploads/${pro.image}`}
+                                src={pro?.imageUrl}
                                 alt="Product"
                             />
                         </div>
@@ -299,7 +279,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 ))}
-            </div> */}
+            </div>
         </div>
     );
 };
