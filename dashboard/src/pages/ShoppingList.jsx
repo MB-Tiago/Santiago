@@ -20,7 +20,7 @@ const items = [
   { url: "http://192.168.10.36", img: "MedPoint.png", caption: "MedPoint" },
   { url: "http://192.168.10.21", img: "OHMART.jpg", caption: "OHMart" },
   { url: "http://192.168.10.22", img: "tx.png", caption: "TX" },
-  { url: "http://192.168.10.22", img: "INGCO.png", caption: "INGCO" },
+  { url: "http://192.168.10.29", img: "INGCO.png", caption: "INGCO" },
   { url: "http://192.168.10.26", img: "Logo.jpg", caption: "ShoePatoes" },
   { url: "http://192.168.10.24", img: "NationalBookStore.jpg", caption: "National BookStore" },
   { url: "http://192.168.10.25", img: "SavemoreLogo.png", caption: "SaveMore" },
