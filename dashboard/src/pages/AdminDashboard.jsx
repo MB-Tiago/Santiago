@@ -141,7 +141,8 @@ const AdminDashboard = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('Server response:', addProductResponse.data);
+            console.log('Full product data:', addProductResponse.data.data);
+            // console.log('Server response:', addProductResponse.data);
     
             setProducts({
                 productName: '',
@@ -270,7 +271,7 @@ const AdminDashboard = () => {
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (
-                                <img src={products.productImageUrl} alt="Product" />
+                                <img src={product.image} alt={product.name} />
                             ) : (
                                 <h1>No image</h1>
                             )}
