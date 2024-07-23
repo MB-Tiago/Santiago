@@ -97,23 +97,23 @@ const AdminDashboard = () => {
         try {
             console.log('Starting product addition process');
             const { productName, productPrice, productDescription, productImage } = products;
-    
+
             if (!productName || !productPrice || !productDescription || !productImage) {
                 console.log('Missing required fields');
                 return alert('Fields must not be empty!');
             }
-    
+
             if (!(productImage instanceof File)) {
                 console.error('Invalid image file');
                 return alert('Please select a valid image file');
             }
-    
+
             console.log('Image details:', productImage.name, productImage.type, productImage.size);
-    
+
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
             cloudinaryData.append('upload_preset', 'dqh9de7m');
-    
+
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
                 `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
@@ -124,17 +124,17 @@ const AdminDashboard = () => {
                     }
                 }
             );
-    
+
             console.log('Cloudinary response received:', cloudinaryResponse.data);
             const imageUrl = cloudinaryResponse.data.secure_url;
-    
+
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
                 imageUrl
             };
-    
+
             console.log('Sending product data to server:', productData);
             const addProductResponse = await axios.post('https://server-two-blue.vercel.app/addproduct', productData, {
                 headers: {
@@ -142,18 +142,18 @@ const AdminDashboard = () => {
                 }
             });
             console.log('Server response:', addProductResponse.data);
-    
+
             setProducts({
                 productName: '',
                 productPrice: '',
                 productDescription: '',
                 productImage: null
             });
-    
+
             console.log('Product state reset');
             fetchMenu();
             console.log('Menu refreshed');
-    
+
             alert('Product added successfully!');
         } catch (error) {
             console.error('Error adding product:', error);
@@ -172,9 +172,9 @@ const AdminDashboard = () => {
             console.log('Modal closed');
         }
     };
-    
-    
-    
+
+
+
 
 
     const handleDeleteProduct = async () => {
@@ -208,18 +208,18 @@ const AdminDashboard = () => {
     const handleUpdateProduct = async () => {
         try {
             const { _id, productName, productDescription, productPrice, productImage } = selectedProduct;
-    
+
             if (!_id || !productName || !productDescription || !productPrice) {
                 return alert('Fields must not be empty!');
             }
-    
-            let imageUrl = selectedProduct.image; // Use existing image if no new one is uploaded
-    
+
+            let imageUrl = selectedProduct.image;
+
             if (productImage instanceof File) {
                 const cloudinaryData = new FormData();
                 cloudinaryData.append('file', productImage);
                 cloudinaryData.append('upload_preset', 'dqh9de7m');
-    
+
                 const cloudinaryResponse = await axios.post(
                     `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
                     cloudinaryData,
@@ -229,10 +229,10 @@ const AdminDashboard = () => {
                         }
                     }
                 );
-    
+
                 imageUrl = cloudinaryResponse.data.secure_url;
             }
-    
+
             const data = {
                 productId: _id,
                 productName,
@@ -240,13 +240,13 @@ const AdminDashboard = () => {
                 productDescription,
                 imageUrl
             };
-    
+
             const response = await axios.post('https://server-two-blue.vercel.app/editproduct', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             if (response.data.success) {
                 handleCloseEditModal();
                 fetchMenu();
@@ -261,6 +261,7 @@ const AdminDashboard = () => {
 
     const fetchMenu = async () => {
         const menu = await axios.get('https://server-two-blue.vercel.app/getallproducts');
+        console.log('Fetched menu:', menu?.data?.data);
         setValues(menu?.data?.data);
     };
 
@@ -299,66 +300,63 @@ const AdminDashboard = () => {
             </div>
 
             <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
-    <div className="view-modal">
-        <h1>Edit</h1>
-        {selectedProduct && (
-            <div className="modal-forms">
-                <div className="image-container">
-                    {selectedProduct.productImageUrl ? (
-                        <img src={selectedProduct.productImageUrl} alt="Product" />
-                    ) : selectedProduct.image ? (
-                        <img
-                            src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
-                            alt="Product"
-                        />
-                    ) : (
-                        <h1>No image</h1>
+                <div className="view-modal">
+                    <h1>Edit</h1>
+                    {selectedProduct && (
+                        <div className="modal-forms">
+                            <div className="image-container">
+                                {selectedProduct.productImageUrl ? (
+                                    <img src={selectedProduct.productImageUrl} alt="Product" />
+                                ) : selectedProduct.image ? (
+                                    <img src={pro.imageUrl} alt="Product" />
+                                ) : (
+                                    <h1>No image</h1>
+                                )}
+                            </div>
+                            <TextField
+                                name="productName"
+                                label="Product Name"
+                                value={selectedProduct.productName}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                name="productDescription"
+                                label="Product Description"
+                                value={selectedProduct.productDescription}
+                                onChange={handleEditChange}
+                            />
+                            <TextField
+                                name="productPrice"
+                                type="number"
+                                label="Product Price"
+                                value={selectedProduct.productPrice}
+                                onChange={handleEditChange}
+                            />
+                            <input
+                                name="productImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleEditChange}
+                            />
+                            <div className="btn-add">
+                                <Button variant="contained" onClick={handleUpdateProduct}>
+                                    Save Changes
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleDeleteProduct}
+                                    startIcon={<DeleteIcon />}
+                                >
+                                    Delete
+                                </Button>
+                                <Button variant="contained" onClick={handleCloseEditModal}>
+                                    Cancel
+                                </Button>
+                            </div>
+                        </div>
                     )}
                 </div>
-                <TextField
-                    name="productName"
-                    label="Product Name"
-                    value={selectedProduct.productName}
-                    onChange={handleEditChange}
-                />
-                <TextField
-                    name="productDescription"
-                    label="Product Description"
-                    value={selectedProduct.productDescription}
-                    onChange={handleEditChange}
-                />
-                <TextField
-                    name="productPrice"
-                    type="number"
-                    label="Product Price"
-                    value={selectedProduct.productPrice}
-                    onChange={handleEditChange}
-                />
-                <input
-                    name="productImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleEditChange}
-                />
-                <div className="btn-add">
-                    <Button variant="contained" onClick={handleUpdateProduct}>
-                        Save Changes
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={handleDeleteProduct}
-                        startIcon={<DeleteIcon />}
-                    >
-                        Delete
-                    </Button>
-                    <Button variant="contained" onClick={handleCloseEditModal}>
-                        Cancel
-                    </Button>
-                </div>
-            </div>
-        )}
-    </div>
-</Modal>
+            </Modal>
 
             <Modal open={modalEditOpen} onClose={handleCloseEditModal}>
                 <div className="view-modal">
@@ -366,11 +364,8 @@ const AdminDashboard = () => {
                     {selectedProduct && (
                         <div className="modal-forms">
                             <div className="image-container">
-                                {selectedProduct.image ? (
-                                    <img
-                                        src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
-                                        alt="Product"
-                                    />
+                                {selectedProduct.imageUrl ? (
+                                    <img src={selectedProduct.imageUrl} alt="Product" />
                                 ) : (
                                     <h1>No image</h1>
                                 )}
