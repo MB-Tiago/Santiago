@@ -380,10 +380,10 @@ const AdminDashboard = () => {
                         onClick={() => handleOpenEditModal(pro)}
                     >
                         <div className="image-container">
-                            <img
-                                src={`https://server-two-blue.vercel.app/uploads/${pro.image}`}
+                        
+                                <DisplayImage publicId={pro.image} />
                                 alt="Product"
-                            />
+                        
                         </div>
                         <div className="product-info">
                             <h2>{pro.name}</h2>

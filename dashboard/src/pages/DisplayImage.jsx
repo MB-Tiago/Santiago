@@ -8,7 +8,7 @@ const DisplayImage = ({ publicId }) => {
     const cld = new Cloudinary({ cloud: { cloudName: 'dnw3vru0m' } });
 
     const img = cld.image(publicId)
-        .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
+        .format('auto') 
         .quality('auto')
         .resize(auto().gravity(autoGravity()).width(500).height(500)); // Transform the image: auto-crop to square aspect_ratio
 
