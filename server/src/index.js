@@ -248,7 +248,8 @@ app.post('/addproduct', async (req, res) => {
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl // Use the Cloudinary URL
+      image: imageUrl,  // This field is required in your schema
+      imageUrl: imageUrl  // This saves the URL to display the image
     });
 
     const savedProduct = await newProduct.save();
