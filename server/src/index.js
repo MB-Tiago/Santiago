@@ -238,18 +238,18 @@ app.post('/adduser', upload.single('image'), async (req, res) => {
 
 app.post('/addproduct', async (req, res) => {
   try {
-    const { productName, productDescription, productPrice, imageUrl } = req.body;
+    const { productName, productDescription, productPrice, productImage } = req.body;
     const productId = Math.floor(Math.random() * 100000);
 
-    console.log('Received product data:', { productName, productDescription, productPrice, imageUrl });
+    console.log('Received product data:', { productName, productDescription, productPrice, image });
 
     const newProduct = new Products({
       productId: productId,
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl,  // This field is required in your schema
-      imageUrl: imageUrl  // This saves the URL to display the image
+      image: productImage
+     
     });
 
     const savedProduct = await newProduct.save();
