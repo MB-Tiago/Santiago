@@ -333,7 +333,7 @@ const AdminDashboard = () => {
                             <div className="image-container">
                                 {selectedProduct.image ? (
                                     <img
-                                        src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
+                                        src={`${selectedProduct.image}`}
                                         alt="Product"
                                     />
                                 ) : (
