@@ -16,10 +16,10 @@ const User = require('../models/userData.js');
 const adminModel = require('../models/adminData.js');
 const Products = require('../models/productModel.js');
 
-cloudinary.config({ 
-  cloud_name: 'dnw3vru0m', 
-        api_key: '866971629383898', 
-        api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg' 
+cloudinary.config({
+  cloud_name: 'dnw3vru0m',
+  api_key: '866971629383898',
+  api_secret: 'Gwq7Oje7yx1d0RRGN09iWon19qg'
 });
 
 
@@ -252,9 +252,7 @@ app.post('/addproduct', async (req, res) => {
     });
 
     const savedProduct = await newProduct.save();
-
-    console.log('Saved image URL:', savedProduct.image);
-
+    console.log('Saved product:', savedProduct);
     // console.log('Saved product:', savedProduct);
 
     res.json({ success: true, message: 'Product added successfully!', data: savedProduct });

@@ -28,7 +28,15 @@ const AdminDashboard = () => {
     const [searchBy, setSearchBy] = useState('name'); // Default search by name
 
     useEffect(() => {
-        fetchMenu();
+        const fetchMenu = async () => {
+            try {
+              const response = await axios.get('https://server-two-blue.vercel.app/getproducts');
+              console.log('Fetched products:', response.data);
+              setMenuItems(response.data);
+            } catch (error) {
+              console.error('Error fetching menu:', error);
+            }
+          };
     }, []);
 
     const handleOpenAddModal = () => {
