@@ -246,7 +246,7 @@ app.post('/addproduct', async (req, res) => {
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl
+      image: imageUrl // Use the Cloudinary URL sent from the frontend
     });
 
     const savedProduct = await newProduct.save();
