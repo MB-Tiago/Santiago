@@ -35,6 +35,12 @@ const AdminDashboard = () => {
         setModalAddOpen(true);
     };
 
+    const extractPublicId = (url) => {
+        const parts = url.split('/');
+        return parts[parts.length - 1].split('.')[0]; // Assuming the public ID is the last part before the file extension
+    };
+    
+
     const handleCloseAddModal = () => {
         setModalAddOpen(false);
     };
@@ -381,8 +387,7 @@ const AdminDashboard = () => {
                     >
                         <div className="image-container">
                         
-                                <DisplayImage publicId={pro.image} />
-                                alt="Product"
+                        <DisplayImage publicId={extractPublicId(pro.image)} />
                         
                         </div>
                         <div className="product-info">
