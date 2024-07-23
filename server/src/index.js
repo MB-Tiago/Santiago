@@ -56,8 +56,8 @@ const ConnectToDatabase = async () => {
   }
 }
 
-app.listen(process.env.SERVER_PORT, process.env.HOST, () => {
-  console.log(`Listening: ${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Connected to server`);
 })
 
 app.get('/', (req, res) => {
