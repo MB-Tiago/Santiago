@@ -279,8 +279,8 @@ const AdminDashboard = () => {
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.ImageUrl ? (
-                                <img src={ImageUrl} alt="Product" />
+                            {products.productImageUrl ? (
+                                <img src={products.productImageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
@@ -308,7 +308,7 @@ const AdminDashboard = () => {
                             name="productImage"
                             type="file"
                             accept="image/*"
-                           
+                           value={imageUrl}
                             onChange={handleOnChange}
                         />
                         <div className="btn-add">
