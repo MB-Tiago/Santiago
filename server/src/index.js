@@ -248,8 +248,8 @@ app.post('/addproduct', async (req, res) => {
       name: productName,
       description: productDescription,
       price: productPrice,
-      image: imageUrl,  // This field is required in your schema
-      imageUrl: imageUrl  // This saves the URL to display the image
+      image: imageUrl,  
+      imageUrl: imageUrl 
     });
 
     const savedProduct = await newProduct.save();
