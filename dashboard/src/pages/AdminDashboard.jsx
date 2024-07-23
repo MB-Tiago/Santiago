@@ -116,7 +116,7 @@ const AdminDashboard = () => {
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m`,
+                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
                 cloudinaryData,
                 {
                     headers: {
@@ -126,13 +126,13 @@ const AdminDashboard = () => {
             );
     
             console.log('Cloudinary response received:', cloudinaryResponse.data);
-            const image = cloudinaryResponse.data.secure_url;
+            const imageUrl = cloudinaryResponse.data.secure_url;
     
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
-                image
+                imageUrl
             };
     
             console.log('Sending product data to server:', productData);
