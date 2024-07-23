@@ -66,12 +66,12 @@ const AdminDashboard = () => {
         const { name, value, files } = e.target;
         if (name === 'productImage' && files && files[0]) {
             const file = files[0];
-            const image = URL.createObjectURL(file);
+            const imageUrl = URL.createObjectURL(file);
 
             setProducts((prev) => ({
                 ...prev,
                 productImage: file,
-                productImage: image
+                productImageUrl: imageUrl
             }));
         } else {
             setProducts((prev) => ({
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
             productName: '',
             productPrice: '',
             productDescription: '',
-            productImage: '',
+            productImageUrl: '',
             productImage: null
         });
     };
@@ -112,11 +112,11 @@ const AdminDashboard = () => {
     
             const cloudinaryData = new FormData();
             cloudinaryData.append('file', productImage);
-            cloudinaryData.append('upload_preset', 'dqh9de7m'); 
+            cloudinaryData.append('upload_preset', 'dqh9de7m'); // Adjust as necessary
     
             console.log('Sending request to Cloudinary');
             const cloudinaryResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/dnw3vru0m/image/upload`,
+                `https://api.cloudinary.com/v1_1/dnw3vru0m`,
                 cloudinaryData,
                 {
                     headers: {
@@ -126,13 +126,13 @@ const AdminDashboard = () => {
             );
     
             console.log('Cloudinary response received:', cloudinaryResponse.data);
-            const image = cloudinaryResponse.data.secure_url;
+            const imageUrl = cloudinaryResponse.data.secure_url;
     
             const productData = {
                 productName,
                 productPrice,
                 productDescription,
-                image
+                imageUrl
             };
     
             console.log('Sending product data to server:', productData);
@@ -269,8 +269,8 @@ const AdminDashboard = () => {
                     <h1>Add Item</h1>
                     <div className="modal-forms">
                         <div className="image-container">
-                            {products.productImage ? (
-                                <img src={products.productImage} alt="Product" />
+                            {products.productImageUrl ? (
+                                <img src={products.productImageUrl} alt="Product" />
                             ) : (
                                 <h1>No image</h1>
                             )}
