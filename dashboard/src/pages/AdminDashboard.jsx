@@ -276,7 +276,8 @@ const AdminDashboard = () => {
                     <div className="modal-forms">
                         <div className="image-container">
                             {products.productImageUrl ? (
-                                <img src={products.productImageUrl} alt="Product" />
+                               <DisplayImage publicId={extractPublicId(pro.image)} />
+
                             ) : (
                                 <h1>No image</h1>
                             )}
@@ -326,7 +327,8 @@ const AdminDashboard = () => {
                             <div className="image-container">
                                 {selectedProduct.image ? (
                                     <img
-                                        src={`https://server-two-blue.vercel.app/uploads/${selectedProduct.image}`}
+                                        src={`https://server-two-blue.vercel.app/uploads/${<DisplayImage publicId={extractPublicId(pro.image)} />
+                                    }`}
                                         alt="Product"
                                     />
                                 ) : (
